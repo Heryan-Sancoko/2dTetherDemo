@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+//THIS SCRIPT IS STILL A WIP. DISABLE IT TO RUN NORMALLY.
+
 public class TetherModule : PlayerModule
 {
 
