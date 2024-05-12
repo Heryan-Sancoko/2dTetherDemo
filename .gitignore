@@ -1,3 +1,7 @@
 Library/
 Logs/
 obj/
+*.sln
+*.csproj
+*.suo
+*.dwlt
