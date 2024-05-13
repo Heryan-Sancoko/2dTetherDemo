@@ -5,9 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private List<PlayerModule> moduleList = new List<PlayerModule>();
+    [SerializeField] private PlayerMovementModule playerMovementModule;
     private Rigidbody rbody;
     public Rigidbody Rbody => rbody;
-
 
     void Awake()
     {
@@ -15,6 +15,13 @@ public class PlayerController : MonoBehaviour
         foreach (PlayerModule module in moduleList)
         {
             module.AddPlayerController(this);
+
+            switch (module)
+            {
+                case PlayerMovementModule:
+                    playerMovementModule = module as PlayerMovementModule;
+                    break;
+            }
         }
     }
 
@@ -33,6 +40,11 @@ public class PlayerController : MonoBehaviour
         {
             module.FixedUpdatePlayerModule();
         }
+    }
+
+    public void ApplyNewVelocityToRigidbody(Vector3 newVel)
+    {
+        playerMovementModule.ApplyNewVelocityToRigidbody(newVel);
     }
 
     public T GetModule<T>() where T : PlayerModule

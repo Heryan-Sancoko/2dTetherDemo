@@ -8,6 +8,7 @@ public class PlayerMovementModule : PlayerModule
 {
     [Header("Movement variables")]
     [SerializeField] private Vector2 inputVector;
+    public Vector2 InputVector => inputVector;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float topSpeed;
     private Rigidbody rbody;
@@ -25,7 +26,7 @@ public class PlayerMovementModule : PlayerModule
     private float usedJumpTime;
     private float coyoteTimeUsed;
 
-    private enum MoveStatus{idle, jumping, moving};
+    public enum MoveStatus{idle, jumping, moving, tethering};
     [SerializeField] private MoveStatus currentMoveStatus;
 
     private InputManager inputmanager;
@@ -95,6 +96,9 @@ public class PlayerMovementModule : PlayerModule
     public override void FixedUpdatePlayerModule()
     {
         base.FixedUpdatePlayerModule();
+
+        if (currentMoveStatus == MoveStatus.tethering)
+            return;
 
         if (groundedCheckModule.IsGrounded)
         {
@@ -172,6 +176,13 @@ public class PlayerMovementModule : PlayerModule
         Vector3 JumpStopVelocity = new Vector3(rbody.velocity.x, 0, 0);
         ApplyNewVelocityToRigidbody(JumpStopVelocity);
     }
+
+    public void ChangeCurrentMoveStatus(MoveStatus newMoveStatus)
+    {
+        currentMoveStatus = newMoveStatus;
+    }
+
+
 
 
 }
