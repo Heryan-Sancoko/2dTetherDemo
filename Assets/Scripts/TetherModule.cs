@@ -234,7 +234,7 @@ public class TetherModule : PlayerModule
                 nodePositionArray[i] = tetherNodes[i].transform.position;
             }
         }
-        Debug.LogError("REDRAWING WITH NEW NODE");
+
         lineRenderer.positionCount = nodePositionArray.Length;
         lineRenderer.SetPositions(nodePositionArray);
     }
@@ -249,7 +249,8 @@ public class TetherModule : PlayerModule
     {
         //Debug.LogError("TETHER UP");
         currentTetherState = TetherState.idle;
-        playerMovementModule.ChangeCurrentMoveStatus(PlayerMovementModule.MoveStatus.idle);
+        playerMovementModule.ChangeCurrentMoveStatus(PlayerMovementModule.MoveStatus.passive);
+        playerMovementModule.SetJumpAmount(1);
         inactiveNodes.AddRange(tetherNodes);
         tetherNodes.Clear();
         

@@ -26,7 +26,7 @@ public class PlayerMovementModule : PlayerModule
     private float usedJumpTime;
     private float coyoteTimeUsed;
 
-    public enum MoveStatus{idle, jumping, moving, tethering};
+    public enum MoveStatus{idle, jumping, moving, tethering, passive};
     [SerializeField] private MoveStatus currentMoveStatus;
 
     private InputManager inputmanager;
@@ -34,6 +34,8 @@ public class PlayerMovementModule : PlayerModule
 
     //cancel jump when hitting a roof or enemy contact
     public UnityAction JumpCancelled;
+
+    private static float playerDiameter = 0.5f;
 
 
     private void Start()
@@ -64,7 +66,7 @@ public class PlayerMovementModule : PlayerModule
             //move the player to the ground if we are grounded
             //so that all jumps have a consistent starting point
             if (groundedCheckModule.IsGrounded)
-                transform.position = groundedCheckModule.HitPoint;
+                transform.position = groundedCheckModule.HitPoint + (Vector3.up * playerDiameter);
 
             //don't consume a jump if we are grounded or have coyote time
             if (!groundedCheckModule.IsGrounded && coyoteTimeUsed >= availableCoyoteTime)
@@ -91,6 +93,17 @@ public class PlayerMovementModule : PlayerModule
     public override void UpdatePlayerModule()
     {
         base.UpdatePlayerModule();
+
+        if (usedJumpTime < availableJumpTime)
+        {
+            //if jump is released early, cancel ascension and begin descent
+            if (inputmanager.Jump.WasReleasedThisFrame() ||
+            usedJumpTime == availableJumpTime)
+            {
+                //descend if player let go of jump or jump time depleted
+                JumpCancelled?.Invoke();
+            }
+        }
     }
 
     public override void FixedUpdatePlayerModule()
@@ -118,13 +131,25 @@ public class PlayerMovementModule : PlayerModule
 
     private void AerialMovement()
     {
-        //no grip in the air
-        if (inputVector != Vector2.zero)
+        ResetPostSwingMomentum();
+
+        if (currentMoveStatus != MoveStatus.passive)
+        {
             ApplyStandardMovement();
+        }
 
         ManageCoyoteTime();
         ApplyJump();
 
+
+    }
+
+    private void ResetPostSwingMomentum()
+    {
+        if (inputVector != Vector2.zero)
+        {
+            currentMoveStatus = MoveStatus.jumping;
+        }
     }
 
     private void ApplyJump()
@@ -140,14 +165,8 @@ public class PlayerMovementModule : PlayerModule
             currentJumpSpeed = Mathf.Lerp(currentJumpSpeed, 0, jumpSpeedDecayRate);
             usedJumpTime += Time.deltaTime;
 
-            //if jump is released early, cancel ascension and begin descent
-            if (inputmanager.Jump.WasReleasedThisFrame() && usedJumpTime < availableJumpTime * jumpCancelTime ||
-                usedJumpTime == availableJumpTime)
-            {
-                //descend if player let go of jump or jump time depleted
-                JumpCancelled?.Invoke();
-            }
         }
+
     }
 
     private void ApplyStandardMovement()
@@ -182,7 +201,10 @@ public class PlayerMovementModule : PlayerModule
         currentMoveStatus = newMoveStatus;
     }
 
-
+    public void SetJumpAmount(int amountOfJumpsRemaining)
+    {
+        jumpsUsed = availableJumps-amountOfJumpsRemaining;
+    }
 
 
 }

@@ -316,7 +316,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 355586615}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.12, y: 6.22, z: 0}
+  m_LocalPosition: {x: -6.12, y: 3.7, z: 0}
   m_LocalScale: {x: 1.1982338, y: 0.9855033, z: 3.7253}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -567,7 +567,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 10.7
+  orthographic size: 4.23
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -879,10 +879,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputVector: {x: 0, y: 0}
   moveSpeed: 10
-  topSpeed: 0
-  jumpSpeed: 30
-  jumpSpeedDecayRate: 0.2
-  availableJumpTime: 0.5
+  topSpeed: 20
+  jumpSpeed: 10
+  jumpSpeedDecayRate: 0.1
+  availableJumpTime: 1
   availableJumps: 1
   jumpCancelTime: 0.9
   availableCoyoteTime: 0.2
@@ -946,7 +946,7 @@ MonoBehaviour:
   nodeDistanceFromCollision: 0.5
   swingSpeed: 10
   tetherRange: 500
-  tetherAnchorRadius: 0.05
+  tetherAnchorRadius: 1
   tetherMask:
     serializedVersion: 2
     m_Bits: 2147483647
@@ -1003,7 +1003,7 @@ LineRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 1
+        value: 0.39374924
         inSlope: 0
         outSlope: 0
         tangentMode: 0
