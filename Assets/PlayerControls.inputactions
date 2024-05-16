@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Dash",
+                    "type": "Button",
+                    "id": "588b9817-2930-4aaf-a38b-f6e8e9cb8395",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -174,6 +183,28 @@
                     "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "7845a1b4-3f6f-4c7d-99bb-28bf34b09911",
+                    "path": "<Keyboard>/d",
+                    "interactions": "TapHold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a56154c0-668c-4063-98c7-c909a1ec1e1a",
+                    "path": "<Keyboard>/a",
+                    "interactions": "TapHold",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Dash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

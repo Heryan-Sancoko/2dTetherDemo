@@ -2,12 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MoveStatus { idle, jumping, moving, tethering, dashing, attacking, passive };
+
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private List<PlayerModule> moduleList = new List<PlayerModule>();
     [SerializeField] private PlayerMovementModule playerMovementModule;
     private Rigidbody rbody;
     public Rigidbody Rbody => rbody;
+
+    [SerializeField] private MoveStatus currentMoveStatus;
+    public MoveStatus CurrentMoveStatus => currentMoveStatus;
 
     void Awake()
     {
@@ -45,6 +50,11 @@ public class PlayerController : MonoBehaviour
     public void ApplyNewVelocityToRigidbody(Vector3 newVel)
     {
         playerMovementModule.ApplyNewVelocityToRigidbody(newVel);
+    }
+
+    public void SetCurrentMoveStatus(MoveStatus newMoveStatus)
+    {
+        currentMoveStatus = newMoveStatus;
     }
 
     public T GetModule<T>() where T : PlayerModule

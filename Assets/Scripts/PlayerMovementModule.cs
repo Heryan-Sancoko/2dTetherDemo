@@ -21,13 +21,14 @@ public class PlayerMovementModule : PlayerModule
     [SerializeField] private int availableJumps;
     [SerializeField] private float jumpCancelTime;
     [SerializeField] private float availableCoyoteTime = 0.2f;
-    private float currentJumpSpeed;
     [SerializeField] private int jumpsUsed;
+    [SerializeField] private float SlowFallSpeed;
+    [SerializeField] private float FastFallSpeed;
+
+    private float currentJumpSpeed;
     private float usedJumpTime;
     private float coyoteTimeUsed;
 
-    public enum MoveStatus{idle, jumping, moving, tethering, passive};
-    [SerializeField] private MoveStatus currentMoveStatus;
 
     private InputManager inputmanager;
     private GroundedCheckModule groundedCheckModule;
@@ -36,6 +37,8 @@ public class PlayerMovementModule : PlayerModule
     public UnityAction JumpCancelled;
 
     private static float playerDiameter = 0.5f;
+    private const float maxFastFallValue = -0.7f;
+    private const float minSlowFallValue = 0.7f;
 
 
     private void Start()
@@ -50,6 +53,7 @@ public class PlayerMovementModule : PlayerModule
         groundedCheckModule = playerController.GetModule<GroundedCheckModule>();
         groundedCheckModule.JustLanded += OnLand;
 
+        usedJumpTime = availableJumpTime;
     }
 
     private void OnMove(InputAction.CallbackContext callback)
@@ -77,7 +81,7 @@ public class PlayerMovementModule : PlayerModule
             coyoteTimeUsed = availableCoyoteTime;
             usedJumpTime = 0;
             currentJumpSpeed = jumpSpeed;
-            currentMoveStatus = MoveStatus.jumping;
+            playerController.SetCurrentMoveStatus(MoveStatus.jumping);
         }
     }
 
@@ -85,9 +89,22 @@ public class PlayerMovementModule : PlayerModule
     {
         jumpsUsed = 0;
         coyoteTimeUsed = 0;
-        currentMoveStatus = inputVector == Vector2.zero ?
-            MoveStatus.idle : 
+        SelectBestMoveStatusFromContext();
+    }
+
+    public void SelectBestMoveStatusFromContext()
+    {
+        if (!groundedCheckModule.IsGrounded)
+        {
+            playerController.SetCurrentMoveStatus(MoveStatus.jumping);
+            return;
+        }
+
+        MoveStatus newMoveStatus = inputVector == Vector2.zero ?
+            MoveStatus.idle :
             MoveStatus.moving;
+
+        playerController.SetCurrentMoveStatus(newMoveStatus);
     }
 
     public override void UpdatePlayerModule()
@@ -96,13 +113,26 @@ public class PlayerMovementModule : PlayerModule
 
         if (usedJumpTime < availableJumpTime)
         {
+            if (InputVector.y < maxFastFallValue)
+            {
+                FastFall();
+                return;
+            }
+
+
             //if jump is released early, cancel ascension and begin descent
             if (inputmanager.Jump.WasReleasedThisFrame() ||
-            usedJumpTime == availableJumpTime)
+            usedJumpTime >= availableJumpTime ||
+            playerController.CurrentMoveStatus != MoveStatus.jumping)
             {
                 //descend if player let go of jump or jump time depleted
                 JumpCancelled?.Invoke();
             }
+        }
+
+        if (playerController.CurrentMoveStatus == MoveStatus.dashing)
+        {
+            FastFall();
         }
     }
 
@@ -110,7 +140,7 @@ public class PlayerMovementModule : PlayerModule
     {
         base.FixedUpdatePlayerModule();
 
-        if (currentMoveStatus == MoveStatus.tethering)
+        if (playerController.CurrentMoveStatus == MoveStatus.tethering)
             return;
 
         if (groundedCheckModule.IsGrounded)
@@ -133,9 +163,9 @@ public class PlayerMovementModule : PlayerModule
     {
         ResetPostSwingMomentum();
 
-        if (currentMoveStatus != MoveStatus.passive)
+        if (playerController.CurrentMoveStatus != MoveStatus.passive)
         {
-            ApplyStandardMovement();
+            InputBasedAirMovement();
         }
 
         ManageCoyoteTime();
@@ -144,11 +174,50 @@ public class PlayerMovementModule : PlayerModule
 
     }
 
+    private void InputBasedAirMovement()
+    {
+        switch (inputVector.y)
+        {
+            case >= minSlowFallValue:
+                SlowFall();
+                break;
+            case <= maxFastFallValue:
+                FastFall();
+                    break;
+            default:
+                ApplyStandardMovement();
+                break;
+        }
+    }
+
+    private void SlowFall()
+    {
+        Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, Mathf.Clamp(rbody.velocity.y, -SlowFallSpeed, rbody.velocity.y), 0);
+        ApplyNewVelocityToRigidbody(moveVector);
+    }
+
+    private void FastFall()
+    {
+        if (InputVector.y < maxFastFallValue)
+        {
+            if (playerController.CurrentMoveStatus == MoveStatus.jumping)
+            {
+                JumpCancelled?.Invoke();
+            }
+            else
+                SelectBestMoveStatusFromContext();
+
+            Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, FastFallSpeed, 0);
+            ApplyNewVelocityToRigidbody(moveVector);
+
+        }
+    }
+
     private void ResetPostSwingMomentum()
     {
-        if (inputVector != Vector2.zero)
+        if (playerController.CurrentMoveStatus == MoveStatus.passive && inputVector != Vector2.zero)
         {
-            currentMoveStatus = MoveStatus.jumping;
+            playerController.SetCurrentMoveStatus(MoveStatus.jumping);
         }
     }
 
@@ -164,7 +233,6 @@ public class PlayerMovementModule : PlayerModule
 
             currentJumpSpeed = Mathf.Lerp(currentJumpSpeed, 0, jumpSpeedDecayRate);
             usedJumpTime += Time.deltaTime;
-
         }
 
     }
@@ -191,20 +259,17 @@ public class PlayerMovementModule : PlayerModule
 
     private void OnJumpCancelled()
     {
+        if (!groundedCheckModule.IsGrounded)
+            playerController.SetCurrentMoveStatus(MoveStatus.jumping);
+
         usedJumpTime = availableJumpTime;
         Vector3 JumpStopVelocity = new Vector3(rbody.velocity.x, 0, 0);
         ApplyNewVelocityToRigidbody(JumpStopVelocity);
-    }
-
-    public void ChangeCurrentMoveStatus(MoveStatus newMoveStatus)
-    {
-        currentMoveStatus = newMoveStatus;
     }
 
     public void SetJumpAmount(int amountOfJumpsRemaining)
     {
         jumpsUsed = availableJumps-amountOfJumpsRemaining;
     }
-
 
 }

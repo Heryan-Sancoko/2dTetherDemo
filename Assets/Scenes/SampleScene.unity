@@ -181,6 +181,24 @@ MonoBehaviour:
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  Aim:
+    m_Name: Aim
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: fdb1ed1a-fdd0-416f-a3bd-011981552c4b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  Dash:
+    m_Name: Dash
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: a1b46d76-ce8a-42f7-8b56-835092095851
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!4 &113105518
 Transform:
   m_ObjectHideFlags: 0
@@ -760,6 +778,7 @@ GameObject:
   - component: {fileID: 1497469401}
   - component: {fileID: 1497469399}
   - component: {fileID: 1497469402}
+  - component: {fileID: 1497469404}
   - component: {fileID: 1497469400}
   - component: {fileID: 1497469403}
   m_Layer: 0
@@ -785,7 +804,9 @@ MonoBehaviour:
   - {fileID: 1497469401}
   - {fileID: 1497469399}
   - {fileID: 1497469402}
+  - {fileID: 1497469404}
   playerMovementModule: {fileID: 0}
+  currentMoveStatus: 0
 --- !u!135 &1497469395
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -887,7 +908,8 @@ MonoBehaviour:
   jumpCancelTime: 0.9
   availableCoyoteTime: 0.2
   jumpsUsed: 0
-  currentMoveStatus: 0
+  SlowFallSpeed: 0
+  FastFallSpeed: -20
 --- !u!54 &1497469400
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -918,7 +940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGrounded: 0
   groundedSphereCheckRadius: 0.3
-  groundedDistanceCheck: 1.5
+  groundedDistanceCheck: 1
   groundedLayerMask:
     serializedVersion: 2
     m_Bits: 2147483647
@@ -1050,3 +1072,18 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &1497469404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1497469393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f2811b465e60a4682fc9b422217995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableDashTime: 0.5
+  dashCooldownDuration: 1
+  dashSpeed: 10

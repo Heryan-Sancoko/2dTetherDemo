@@ -73,7 +73,7 @@ public class TetherModule : PlayerModule
         if (InputManager.Instance.Tether.WasPressedThisFrame())
         {
             //Debug.LogError("TETHER DOWN");
-            playerMovementModule.ChangeCurrentMoveStatus(PlayerMovementModule.MoveStatus.tethering);
+            playerController.SetCurrentMoveStatus(MoveStatus.tethering);
             PlantTetherAnchor();
         }
     }
@@ -249,7 +249,7 @@ public class TetherModule : PlayerModule
     {
         //Debug.LogError("TETHER UP");
         currentTetherState = TetherState.idle;
-        playerMovementModule.ChangeCurrentMoveStatus(PlayerMovementModule.MoveStatus.passive);
+        playerController.SetCurrentMoveStatus(MoveStatus.passive);
         playerMovementModule.SetJumpAmount(1);
         inactiveNodes.AddRange(tetherNodes);
         tetherNodes.Clear();

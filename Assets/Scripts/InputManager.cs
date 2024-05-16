@@ -10,20 +10,28 @@ public class InputManager : Singleton<InputManager>
     public InputAction Move;
     public InputAction Jump;
     public InputAction Tether;
+    public InputAction Aim;
+    public InputAction Dash;
 
     public override void Awake()
     {
         base.Awake();
         playerInput.enabled = true;
 
-        Move = playerInput.currentActionMap.actions[0];
+        Move = playerInput.currentActionMap.actions[Constants.ActionMapActions.Move];
         Move.Enable();
 
-        Jump = playerInput.currentActionMap.actions[1];
+        Jump = playerInput.currentActionMap.actions[Constants.ActionMapActions.Jump];
         Jump.Enable();
 
-        Tether = playerInput.currentActionMap.actions[2];
+        Tether = playerInput.currentActionMap.actions[Constants.ActionMapActions.Tether];
         Tether.Enable();
+
+        Aim = playerInput.currentActionMap.actions[Constants.ActionMapActions.Aim];
+        Aim.Enable();
+
+        Dash = playerInput.currentActionMap.actions[Constants.ActionMapActions.Dash];
+        Dash.Enable();
     }
 
 
