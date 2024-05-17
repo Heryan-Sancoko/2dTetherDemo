@@ -27,11 +27,13 @@ public class TetherModule : PlayerModule
     [SerializeField] private float swingSpeed;
     [SerializeField] private float tetherRange;
     [SerializeField] private float tetherAnchorRadius;
+    [SerializeField] private float ropeTension;
     [SerializeField] private LayerMask tetherMask;
     [SerializeField] private LineRenderer lineRenderer;
 
     public enum TetherState {idle, shooting, anchored, swinging}
     private TetherState currentTetherState;
+    private float ClosestDistance;
 
 
     private void Start()
@@ -64,6 +66,7 @@ public class TetherModule : PlayerModule
             case TetherState.swinging:
                 ApplySwingDirectionVelocity();
                 CheckTetherCollisionWhileSwinging();
+                RenderTetherRope();
                 break;
         }
     }
@@ -99,6 +102,7 @@ public class TetherModule : PlayerModule
             tetherAnchor.position = hitinfo.point;
             tetherAnchor.parent = hitinfo.transform;
             currentTetherState = TetherState.anchored;
+            ClosestDistance = Vector3.Distance(transform.position, hitinfo.point);
             SetUnusedNodePosition(GetUnusuedNode(), tetherAnchor.position, hitinfo.transform);
         }
 
@@ -154,6 +158,10 @@ public class TetherModule : PlayerModule
 
     private void ApplySwingDirectionVelocity()
     {
+        Vector3 currentTether = GetCurrentTetherPoint();
+
+        CheckRopeTension(currentTether);
+
         MoveSwingAssistant();
 
         Vector3 SwingVec = (swingClockwise) ?
@@ -161,11 +169,16 @@ public class TetherModule : PlayerModule
             -swingAssistant.right;
 
         Vector3 localSwing = swingAssistant.InverseTransformDirection(SwingVec * swingSpeed);
-        localSwing.z = 0;
+        localSwing.z = Mathf.Clamp((Vector3.Distance(transform.position, currentTether) - ClosestDistance) *ropeTension, 0, 999);
         swingdDirection = swingAssistant.TransformDirection(localSwing);
 
         playerMovementModule.ApplyNewVelocityToRigidbody(swingdDirection);
+    }
 
+    private void CheckRopeTension(Vector3 currentTether)
+    {
+        if (Vector3.Distance(transform.position, currentTether) < ClosestDistance)
+            ClosestDistance = Vector3.Distance(transform.position, GetCurrentTetherPoint());
     }
 
     //cast a sphere to the anchor while we're swinging
@@ -242,7 +255,8 @@ public class TetherModule : PlayerModule
 
     private void RenderTetherRope()
     {
-        lineRenderer.SetPosition(lineRenderer.positionCount-1, transform.position);
+        RedrawLineRendererWithNewNode(null);
+        //lineRenderer.SetPosition(lineRenderer.positionCount-1, transform.position);
     }
 
     private void OnTetherCancelled(InputAction.CallbackContext callback)

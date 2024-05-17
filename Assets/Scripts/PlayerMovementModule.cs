@@ -56,6 +56,16 @@ public class PlayerMovementModule : PlayerModule
         usedJumpTime = availableJumpTime;
     }
 
+    private void LateUpdate()
+    {
+        ClampVelocity();
+    }
+
+    private void ClampVelocity()
+    {
+        rbody.velocity = Vector3.ClampMagnitude(rbody.velocity, topSpeed);
+    }
+
     private void OnMove(InputAction.CallbackContext callback)
     {
         inputVector = callback.ReadValue<Vector2>();

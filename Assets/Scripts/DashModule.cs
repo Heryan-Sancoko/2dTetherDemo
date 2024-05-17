@@ -9,6 +9,10 @@ public class DashModule : PlayerModule
     [SerializeField] private float availableDashTime;
     [SerializeField] private float dashCooldownDuration;
     [SerializeField] private float dashSpeed;
+    [Header("Debug values")]
+    [SerializeField] private Material debugTangibleMat;
+    [SerializeField] private Material debugIntangibleMat;
+    [SerializeField] private MeshRenderer debugRenderer;
     private PlayerMovementModule playerMovementModule;
     private float usedDashTime;
     private float dashCooldownRemaining;
@@ -47,6 +51,19 @@ public class DashModule : PlayerModule
                 break;
             default:
                 dashDirection = Vector2.zero;
+                break;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        switch (playerController.CurrentMoveStatus)
+        {
+            case MoveStatus.dashing:
+                debugRenderer.material = debugIntangibleMat;
+                break;
+            default:
+                debugRenderer.material = debugTangibleMat;
                 break;
         }
     }
