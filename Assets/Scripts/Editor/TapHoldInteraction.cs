@@ -38,7 +38,7 @@ public class TapHoldInteraction : IInputInteraction
                 break;
 
             case InputActionPhase.Started:
-                if (context.ControlIsActuated())
+                if (context.ControlIsActuated(0))
                     context.Performed();
                 break;
         }

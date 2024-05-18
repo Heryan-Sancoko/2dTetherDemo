@@ -100,7 +100,8 @@ public class TetherModule : PlayerModule
         if (Physics.SphereCast(transform.position, tetherAnchorRadius, tetherDirection, out RaycastHit hitinfo, tetherRange))
         {
             tetherAnchor.position = hitinfo.point;
-            tetherAnchor.parent = hitinfo.transform;
+            tetherAnchor.SetParent(hitinfo.transform, true);
+            tetherAnchor.localScale = new Vector3(1 / hitinfo.transform.localScale.x, 1 / hitinfo.transform.localScale.y, 1 / hitinfo.transform.localScale.z);
             currentTetherState = TetherState.anchored;
             ClosestDistance = Vector3.Distance(transform.position, hitinfo.point);
             SetUnusedNodePosition(GetUnusuedNode(), tetherAnchor.position, hitinfo.transform);
