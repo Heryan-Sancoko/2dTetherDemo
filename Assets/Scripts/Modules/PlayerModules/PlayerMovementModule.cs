@@ -79,8 +79,8 @@ public class PlayerMovementModule : PlayerModule
         {
             //move the player to the ground if we are grounded
             //so that all jumps have a consistent starting point
-            if (groundedCheckModule.IsGrounded)
-                transform.position = groundedCheckModule.HitPoint + (Vector3.up * playerDiameter);
+            //if (groundedCheckModule.IsGrounded)
+            //    transform.position = groundedCheckModule.HitPoint + (Vector3.up * playerDiameter);
 
             //don't consume a jump if we are grounded or have coyote time
             if (!groundedCheckModule.IsGrounded && coyoteTimeUsed >= availableCoyoteTime)
@@ -99,6 +99,8 @@ public class PlayerMovementModule : PlayerModule
     {
         jumpsUsed = 0;
         coyoteTimeUsed = 0;
+
+        if (playerController.CurrentMoveStatus != MoveStatus.dashing)
         SelectBestMoveStatusFromContext();
     }
 
@@ -166,6 +168,7 @@ public class PlayerMovementModule : PlayerModule
     private void GroundedMovement()
     {
         ApplyStandardMovement();
+        if (playerController.CurrentMoveStatus== MoveStatus.jumping)
         ApplyJump();
     }
 

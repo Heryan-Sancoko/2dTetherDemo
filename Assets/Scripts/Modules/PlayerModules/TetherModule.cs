@@ -43,7 +43,8 @@ public class TetherModule : PlayerModule
 
         mcam = Camera.main;
         playerMovementModule = playerController.GetModule<PlayerMovementModule>();
-        isUsingMouse = Gamepad.current == null;
+        isUsingMouse = true;
+        //isUsingMouse = Gamepad.current == null;
     }
 
     public override void UpdatePlayerModule()

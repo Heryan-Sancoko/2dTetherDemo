@@ -14,8 +14,9 @@ public class DashModule : PlayerModule
     [SerializeField] private Material debugIntangibleMat;
     [SerializeField] private MeshRenderer debugRenderer;
     private PlayerMovementModule playerMovementModule;
-    private float usedDashTime;
-    private float dashCooldownRemaining;
+    [Header("invisible values")]
+    [SerializeField]private float usedDashTime;
+    [SerializeField]private float dashCooldownRemaining;
     private Vector3 dashDirection;
 
 
@@ -35,10 +36,9 @@ public class DashModule : PlayerModule
             dashCooldownRemaining > 0)
             return;
 
-        playerController.SetCurrentMoveStatus(MoveStatus.dashing);
-
-        Vector2 dashVector = playerMovementModule.InputVector;
         usedDashTime = 0;
+        Vector2 dashVector = playerMovementModule.InputVector;
+        playerController.SetCurrentMoveStatus(MoveStatus.dashing);
         BecomeIntangible();
 
         switch (dashVector.x)

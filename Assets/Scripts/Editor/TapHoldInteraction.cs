@@ -8,8 +8,9 @@ using UnityEngine.InputSystem;
 
 public class TapHoldInteraction : IInputInteraction
 {
-    public float firstTapTime = 0.2f;
     public float tapDelay = 0.5f;
+
+    private float pressTime = 0;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void Initialize() { }
@@ -21,25 +22,18 @@ public class TapHoldInteraction : IInputInteraction
 
     void IInputInteraction.Process(ref InputInteractionContext context)
     {
-        if (context.timerHasExpired)
-        {
-            context.Canceled();
-            return;
-        }
-
         switch (context.phase)
         {
             case InputActionPhase.Waiting:
-                if (context.ControlIsActuated(firstTapTime))
+                if (context.ControlIsActuated())
                 {
-                    context.Started();
-                    context.SetTimeout(tapDelay);
-                }
-                break;
+                    if ((Time.realtimeSinceStartup - pressTime) < tapDelay)
+                    {
+                        context.Performed();
+                    }
 
-            case InputActionPhase.Started:
-                if (context.ControlIsActuated(0))
-                    context.Performed();
+                    pressTime = Time.realtimeSinceStartup;
+                }
                 break;
         }
     }

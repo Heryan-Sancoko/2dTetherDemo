@@ -35,11 +35,11 @@ public class GroundedCheckModule : PlayerModule
         {
             if (!isGrounded && rbody.velocity.y <= 0)
             {
+                isGrounded = true;
+                hitPoint = hitinfo.point + radiusOffset;
                 JustLanded?.Invoke();
             }
 
-            isGrounded = true;
-            hitPoint = hitinfo.point + radiusOffset;
         }
         else
         {

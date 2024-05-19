@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class EnemyModule : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    protected Rigidbody rbody;
+
+    protected EnemyController enemyController;
+
+    public virtual void AddEnemyController(EnemyController newEnemyController)
     {
-        
+        enemyController = newEnemyController;
+        rbody = newEnemyController.Rbody;
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void UpdateEnemyModule()
     {
-        
+    }
+
+    public virtual void FixedUpdateEnemyModule()
+    { 
     }
 }
