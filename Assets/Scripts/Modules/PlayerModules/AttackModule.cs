@@ -2,17 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackModule : MonoBehaviour
+public class AttackModule : PlayerModule
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private Rigidbody rbody;
+    [SerializeField] private WeaponScriptable weapon;
 
-    // Update is called once per frame
-    void Update()
+    public override void AddPlayerController(PlayerController newController)
     {
-        
+        base.AddPlayerController(newController);
+        rbody = GetComponent<Rigidbody>();
     }
 }

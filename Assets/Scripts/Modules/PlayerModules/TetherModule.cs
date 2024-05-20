@@ -25,6 +25,7 @@ public class TetherModule : PlayerModule
     [SerializeField] private float tetherSpeed;
     [SerializeField] private float nodeDistanceFromCollision;
     [SerializeField] private float swingSpeed;
+    [SerializeField] private float swingAcceleration;
     [SerializeField] private float tetherRange;
     [SerializeField] private float tetherAnchorRadius;
     [SerializeField] private float ropeTension;
@@ -34,6 +35,7 @@ public class TetherModule : PlayerModule
     public enum TetherState {idle, shooting, anchored, swinging}
     private TetherState currentTetherState;
     private float ClosestDistance;
+    private float currentSwingSpeed;
 
 
     private void Start()
@@ -153,7 +155,7 @@ public class TetherModule : PlayerModule
             float MovementToTetherDot = Vector3.Dot(swingAssistant.right, playerMovementModule.InputVector);
 
             swingClockwise = (MovementToTetherDot > 0);
-
+            currentSwingSpeed = tetherSpeed;
             currentTetherState = TetherState.swinging;
         }
     }
@@ -170,7 +172,8 @@ public class TetherModule : PlayerModule
             swingAssistant.right :
             -swingAssistant.right;
 
-        Vector3 localSwing = swingAssistant.InverseTransformDirection(SwingVec * swingSpeed);
+        Vector3 localSwing = swingAssistant.InverseTransformDirection(SwingVec * currentSwingSpeed);
+        currentSwingSpeed = Mathf.Lerp(currentSwingSpeed, swingSpeed, swingAcceleration);
         localSwing.z = Mathf.Clamp((Vector3.Distance(transform.position, currentTether) - ClosestDistance) *ropeTension, 0, 999);
         swingdDirection = swingAssistant.TransformDirection(localSwing);
 

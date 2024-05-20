@@ -24,6 +24,7 @@ public class PlayerMovementModule : PlayerModule
     [SerializeField] private int jumpsUsed;
     [SerializeField] private float SlowFallSpeed;
     [SerializeField] private float FastFallSpeed;
+    [SerializeField] private float airDeceleration;
 
     private float currentJumpSpeed;
     private float usedJumpTime;
@@ -198,7 +199,7 @@ public class PlayerMovementModule : PlayerModule
                 FastFall();
                     break;
             default:
-                ApplyStandardMovement();
+                ApplyAirMovement();
                 break;
         }
     }
@@ -253,6 +254,22 @@ public class PlayerMovementModule : PlayerModule
     private void ApplyStandardMovement()
     {
         Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
+        ApplyNewVelocityToRigidbody(moveVector);
+    }
+
+    private void ApplyAirMovement()
+    {
+        float HorizontalVelocity = Mathf.Abs(rbody.velocity.x);
+        Vector3 moveVector = Vector3.zero;
+        if (HorizontalVelocity > moveSpeed)
+        {
+            moveVector = new Vector3(inputVector.x * (Mathf.Lerp(HorizontalVelocity, moveSpeed, airDeceleration)), rbody.velocity.y, 0);
+        }
+        else
+        {
+            moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
+        }    
+
         ApplyNewVelocityToRigidbody(moveVector);
     }
 
