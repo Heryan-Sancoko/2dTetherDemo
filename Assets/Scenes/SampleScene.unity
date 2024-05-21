@@ -1323,7 +1323,7 @@ MonoBehaviour:
   inactiveNodes: []
   tetherSpeed: 10
   nodeDistanceFromCollision: 0.5
-  swingSpeed: 30
+  swingSpeed: 20
   swingAcceleration: 0.1
   tetherRange: 500
   tetherAnchorRadius: 1

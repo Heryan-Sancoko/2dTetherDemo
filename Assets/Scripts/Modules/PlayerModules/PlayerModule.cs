@@ -2,23 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerModule : MonoBehaviour
+public class PlayerModule : EntityModule
 {
     protected PlayerController playerController;
 
-    public virtual void AddPlayerController(PlayerController newController)
+    public override void AddController(EntityController newController)
     {
-        playerController = newController;
+        base.AddController(newController);
+        playerController = newController as PlayerController;
     }
-
-    public virtual void UpdatePlayerModule()
-    {
-        
-    }
-
-    public virtual void FixedUpdatePlayerModule()
-    {
-        
-    }
-
 }

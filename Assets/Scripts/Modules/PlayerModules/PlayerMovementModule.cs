@@ -37,7 +37,6 @@ public class PlayerMovementModule : PlayerModule
     //cancel jump when hitting a roof or enemy contact
     public UnityAction JumpCancelled;
 
-    private static float playerDiameter = 0.5f;
     private const float maxFastFallValue = -0.7f;
     private const float minSlowFallValue = 0.7f;
 

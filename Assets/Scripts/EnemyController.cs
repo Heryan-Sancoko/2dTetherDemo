@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : EntityController
 {
 
     [SerializeField] private Rigidbody rbody;
@@ -20,7 +20,7 @@ public class EnemyController : MonoBehaviour
         enemyManager = EnemyManager.Instance;
         foreach (EnemyModule module in enemyModuleList)
         {
-            module.AddEnemyController(this);
+            module.AddController(this);
         }
         
     }

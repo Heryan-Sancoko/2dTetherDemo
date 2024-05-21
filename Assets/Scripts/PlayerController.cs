@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum MoveStatus { idle, jumping, moving, tethering, dashing, attacking, passive };
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : EntityController
 {
     [SerializeField] private List<PlayerModule> moduleList = new List<PlayerModule>();
     [SerializeField] private PlayerMovementModule playerMovementModule;
@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         foreach (PlayerModule module in moduleList)
         {
-            module.AddPlayerController(this);
+            module.AddController(this);
 
             switch (module)
             {

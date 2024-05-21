@@ -10,9 +10,9 @@ public class StandardEnemyMovementModule : EnemyModule
     private PlayerController player;
 
 
-    public override void AddEnemyController(EnemyController newEnemyController)
+    public override void AddController(EntityController newController)
     {
-        base.AddEnemyController(newEnemyController);
+        base.AddController(newController);
         player = EnemyManager.Instance.PlayerController;
     }
 

@@ -19,9 +19,9 @@ public class GroundedCheckModule : PlayerModule
 
     private Rigidbody rbody;
 
-    public override void AddPlayerController(PlayerController newController)
+    public override void AddController(EntityController newController)
     {
-        base.AddPlayerController(newController);
+        base.AddController(newController);
         rbody = GetComponent<Rigidbody>();
     }
 

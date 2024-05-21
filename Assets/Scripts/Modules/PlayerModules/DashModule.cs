@@ -19,11 +19,10 @@ public class DashModule : PlayerModule
     [SerializeField]private float dashCooldownRemaining;
     private Vector3 dashDirection;
 
-
-    public override void AddPlayerController(PlayerController newController)
+    public override void AddController(EntityController newController)
     {
-        base.AddPlayerController(newController);
-        playerMovementModule = newController.GetModule<PlayerMovementModule>();
+        base.AddController(newController);
+        playerMovementModule = playerController.GetModule<PlayerMovementModule>();
 
         InputManager.Instance.Dash.performed += OnDash;
 
@@ -38,6 +37,7 @@ public class DashModule : PlayerModule
 
         usedDashTime = 0;
         Vector2 dashVector = playerMovementModule.InputVector;
+        playerMovementModule.JumpCancelled?.Invoke();
         playerController.SetCurrentMoveStatus(MoveStatus.dashing);
         BecomeIntangible();
 

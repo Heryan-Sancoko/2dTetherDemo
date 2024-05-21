@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyModule : MonoBehaviour
+public class EnemyModule : EntityModule
 {
 
     protected Rigidbody rbody;
 
     protected EnemyController enemyController;
 
-    public virtual void AddEnemyController(EnemyController newEnemyController)
+    public override void AddController(EntityController newController)
     {
-        enemyController = newEnemyController;
-        rbody = newEnemyController.Rbody;
+        base.AddController(newController);
+        enemyController = newController as EnemyController;
+        rbody = enemyController.Rbody;
     }
 
     public virtual void UpdateEnemyModule()
