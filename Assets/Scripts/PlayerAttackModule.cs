@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackModule : EnemyModule
+public class PlayerAttackModule : PlayerModule
 {
+    protected Rigidbody rbody;
     [SerializeField] protected WeaponScriptable weaponData;
     [SerializeField] protected WeaponScript weapon;
-    [SerializeField] protected List<EnemyHealthModule> opponentHealthModuleList = new List<EnemyHealthModule>();
+    [SerializeField] protected List<EnemyHealthModule> enemyHealthModuleList = new List<EnemyHealthModule>();
 
     public float currentDamage;
     public float currentAttackCooldown;

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyType {homing, spacing, turret}
 public class StandardEnemyMovementModule : EnemyModule
 {
     [SerializeField] private EnemyType currentEnemyType;
