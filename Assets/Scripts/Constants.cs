@@ -22,4 +22,9 @@ public static class Constants
         public static int Enemy = 8;
         public static int EnemyIntangible = 9;
     }
+
+    public static class AnimationPrams
+    {
+        public static string StartAttack = "StartAttack";
+    }
 }

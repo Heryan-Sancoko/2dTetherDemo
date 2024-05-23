@@ -8,6 +8,7 @@ public class PlayerAttackModule : PlayerModule
     [SerializeField] protected WeaponScriptable weaponData;
     [SerializeField] protected WeaponScript weapon;
     [SerializeField] protected List<EnemyHealthModule> enemyHealthModuleList = new List<EnemyHealthModule>();
+    [SerializeField] protected LayerMask enemyLayers;
 
     public float currentDamage;
     public float currentAttackCooldown;
@@ -16,11 +17,28 @@ public class PlayerAttackModule : PlayerModule
     {
         base.AddController(newController);
         rbody = GetComponent<Rigidbody>();
+        weapon = Instantiate(weaponData.weaponPrefab,transform).GetComponent<WeaponScript>();
+        weapon.ConfigureLayerMask(enemyLayers);
+    }
+
+    public virtual void StartAttack()
+    {
+        //enable weapon
+        weapon.gameObject.SetActive(true);
+        weapon.transform.LookAt(transform.position + transform.forward);
+        //trigger weapon animation
+        weapon.WeaponAnim.SetTrigger("");
     }
 
     public virtual void PerformAttack()
     {
         weapon.PerformAttack();
+    }
+
+    public virtual void EndAttack()
+    {
+        //disable weapon
+        //spwan particles
     }
 
     public virtual void ClearHitCollidersList()
