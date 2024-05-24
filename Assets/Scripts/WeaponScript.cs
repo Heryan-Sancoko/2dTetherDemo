@@ -7,22 +7,48 @@ public class WeaponScript : MonoBehaviour
     [SerializeField] protected List<SphereCollider> weaponHitboxes = new List<SphereCollider>();
     [SerializeField] protected LayerMask layerMask;
     [SerializeField] protected Animator weaponAnim;
+    [SerializeField] protected List<Collider> hitColliders = new List<Collider>();
     public Animator WeaponAnim => weaponAnim;
-    protected List<Collider> hitColliders = new List<Collider>();
-    protected EntityModule AttackModule;
+    [SerializeField] protected EntityModule AttackModule;
+    protected bool AttackStarted = false;
+    protected float currentDamage;
 
-    public virtual void ConfigureLayerMask(LayerMask mirrorMask)
+    public virtual void ConfigureWeapon(LayerMask mirrorMask, EntityModule newAttackModule)
     {
         layerMask = mirrorMask;
+        AttackModule = newAttackModule;
+    }
+
+    private void Update()
+    {
+        if (AttackStarted)
+            PerformAttack();
     }
 
     public virtual void PerformAttack()
     {
         foreach (Collider hitbox in weaponHitboxes)
         {
-            RaycastHit[] newSphereColliders = Physics.SphereCastAll(hitbox.bounds.center, hitbox.bounds.size.x, Vector3.zero, 0, layerMask);
+            RaycastHit[] newSphereColliders = Physics.SphereCastAll(hitbox.bounds.center, hitbox.bounds.size.x, Vector3.forward, 3, layerMask);
             AddNewCollidersToHitList(newSphereColliders);
         }
+    }
+
+    public virtual void StartAttack()
+    {
+        AttackStarted = true;
+        hitColliders.Clear();
+    }
+
+    public virtual void EndAttack()
+    {
+        hitColliders.Clear();
+        AttackStarted = false;
+    }
+
+    public virtual void ConcealWeapon()
+    {
+        gameObject.SetActive(false);
     }
 
     protected void AddNewCollidersToHitList(RaycastHit[] rayColliders)

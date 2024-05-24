@@ -15,7 +15,7 @@ public class TetherModule : PlayerModule
 
     private PlayerMovementModule playerMovementModule;
     private bool isUsingMouse = false;
-    private Camera mcam;
+    private InputManager inputManager;
 
     [SerializeField] private Vector3 tetherDirection;
     [SerializeField] private bool swingClockwise;
@@ -40,10 +40,10 @@ public class TetherModule : PlayerModule
 
     private void Start()
     {
-        InputManager.Instance.Tether.performed += OnTether;
-        InputManager.Instance.Tether.canceled += OnTetherCancelled;
+        inputManager = InputManager.Instance;
+        inputManager.Tether.performed += OnTether;
+        inputManager.Tether.canceled += OnTetherCancelled;
 
-        mcam = Camera.main;
         playerMovementModule = playerController.GetModule<PlayerMovementModule>();
         isUsingMouse = true;
         //isUsingMouse = Gamepad.current == null;
@@ -92,15 +92,13 @@ public class TetherModule : PlayerModule
     {
         if (isUsingMouse)
         {
-            Vector3 mousePos = mcam.ScreenToWorldPoint(Input.mousePosition);
-            mousePos.z = 0;
-            tetherDirection = (mousePos - transform.position).normalized;
+            tetherDirection = playerController.GetMouseDirection();
         }
 
         //for now it's instant, but later, we might want to make the player actually throw the tether forward
         //but that could cause some bugs like the rope clipping into geometry as the player is still moving around
         //so for now, we'll just keep it simple
-        if (Physics.SphereCast(transform.position, tetherAnchorRadius, tetherDirection, out RaycastHit hitinfo, tetherRange))
+        if (Physics.SphereCast(transform.position, tetherAnchorRadius, tetherDirection, out RaycastHit hitinfo, tetherRange, tetherMask))
         {
             tetherAnchor.position = hitinfo.point;
             tetherAnchor.SetParent(hitinfo.transform, true);

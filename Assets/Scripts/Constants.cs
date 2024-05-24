@@ -12,6 +12,7 @@ public static class Constants
         public static int Tether = 2;
         public static int Aim = 3;
         public static int Dash = 4;
+        public static int Attack = 5;
     }
 
     public static class Layers

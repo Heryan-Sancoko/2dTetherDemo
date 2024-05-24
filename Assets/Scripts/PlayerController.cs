@@ -13,9 +13,11 @@ public class PlayerController : EntityController
 
     [SerializeField] private MoveStatus currentMoveStatus;
     public MoveStatus CurrentMoveStatus => currentMoveStatus;
+    private Camera mainCam;
 
     void Awake()
     {
+        mainCam = Camera.main;
         rbody = GetComponent<Rigidbody>();
         foreach (PlayerModule module in moduleList)
         {
@@ -45,6 +47,13 @@ public class PlayerController : EntityController
         {
             module.FixedUpdatePlayerModule();
         }
+    }
+
+    public Vector3 GetMouseDirection()
+    {
+        Vector3 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        return (mousePos - transform.position).normalized;
     }
 
     public void ApplyNewVelocityToRigidbody(Vector3 newVel)

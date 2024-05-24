@@ -7,11 +7,13 @@ using UnityEngine.Events;
 public class InputManager : Singleton<InputManager>
 {
     [SerializeField] private PlayerInput playerInput;
+
     public InputAction Move;
     public InputAction Jump;
     public InputAction Tether;
     public InputAction Aim;
     public InputAction Dash;
+    public InputAction Attack;
 
     public override void Awake()
     {
@@ -32,7 +34,11 @@ public class InputManager : Singleton<InputManager>
 
         Dash = playerInput.currentActionMap.actions[Constants.ActionMapActions.Dash];
         Dash.Enable();
+
+        Attack = playerInput.currentActionMap.actions[Constants.ActionMapActions.Attack];
+        Attack.Enable();
     }
+
 
 
 }

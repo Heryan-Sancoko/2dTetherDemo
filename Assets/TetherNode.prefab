@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4505273361865774372}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TetherNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5227303251197164038}
   - component: {fileID: 2842687889124045496}
   - component: {fileID: 9148143493120417819}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
