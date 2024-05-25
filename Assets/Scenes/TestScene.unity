@@ -1527,7 +1527,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   weaponHolder: {fileID: 809880098}
-  currentDamage: 5
+  currentDamage: 1
   currentAttackCooldown: 0.2
 --- !u!1 &1887291454
 GameObject:

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class WeaponScript : MonoBehaviour
 {
     [SerializeField] protected List<SphereCollider> weaponHitboxes = new List<SphereCollider>();
@@ -17,6 +18,15 @@ public class WeaponScript : MonoBehaviour
     {
         layerMask = mirrorMask;
         AttackModule = newAttackModule;
+
+        switch (newAttackModule)
+        {
+            case PlayerAttackModule:
+                currentDamage = (newAttackModule as PlayerAttackModule).currentDamage;
+                break;
+            default:
+                break;
+        }
     }
 
     private void Update()
@@ -56,13 +66,25 @@ public class WeaponScript : MonoBehaviour
         if (rayColliders.Length == 0)
             return;
 
+        float damage = 0;
+
         foreach (RaycastHit rayHit in rayColliders)
         {
             if (!hitColliders.Contains(rayHit.collider))
             {
                 if (rayHit.collider.TryGetComponent(out EntityHealthModule healthModule))
                 {
-                    float damage = AttackModule is PlayerAttackModule ? (AttackModule as PlayerAttackModule).currentDamage : 0;
+                    switch (AttackModule)
+                    {
+                        case PlayerAttackModule:
+                            PlayerAttackModule PAM = AttackModule as PlayerAttackModule;
+                            damage = currentDamage;
+                            PAM.JumpOnHitEnemy();
+                            break;
+                        default:
+                            break;
+                    }
+
                     healthModule.TakeDamage(damage);
                     hitColliders.Add(rayHit.collider);
                 }

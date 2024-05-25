@@ -47,6 +47,11 @@ public class PlayerAttackModule : PlayerModule
         weaponHolder.transform.LookAt(transform.position + mousePos, Vector3.up);
     }
 
+    public void JumpOnHitEnemy()
+    {
+        playerController.JumpOnEnemyHit(Vector3.up*5, 0.1f, true);
+    }
+
     public override void UpdatePlayerModule()
     {
         base.UpdatePlayerModule();

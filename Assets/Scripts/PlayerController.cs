@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MoveStatus { idle, jumping, moving, tethering, dashing, attacking, passive };
+public enum MoveStatus { idle, jumping, moving, tethering, dashing, attacking, airHop, passive, stunned };
 
 public class PlayerController : EntityController
 {
@@ -59,6 +59,16 @@ public class PlayerController : EntityController
     public void ApplyNewVelocityToRigidbody(Vector3 newVel)
     {
         playerMovementModule.ApplyNewVelocityToRigidbody(newVel);
+    }
+
+    public void JumpOnEnemyHit(Vector3 velocity, float seconds, bool enableHorizontalMovement)
+    {
+        playerMovementModule.JumpAfterHittingEnemy(velocity, seconds, enableHorizontalMovement);
+    }
+
+    public void ForceVelocityOverDuration(Vector3 velocity, float seconds, bool EnableHorizontalMovement)
+    {
+        playerMovementModule.ForceVelocityInDirectionOverDuration(velocity, seconds, EnableHorizontalMovement);
     }
 
     public void SetCurrentMoveStatus(MoveStatus newMoveStatus)

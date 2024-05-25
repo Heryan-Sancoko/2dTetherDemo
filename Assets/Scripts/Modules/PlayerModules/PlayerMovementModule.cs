@@ -30,6 +30,10 @@ public class PlayerMovementModule : PlayerModule
     private float usedJumpTime;
     private float coyoteTimeUsed;
 
+    private float forcedMovementTimer;
+    private Vector3 forcedVelocity;
+    private bool allowHorizontalMovement;
+
 
     private InputManager inputmanager;
     private GroundedCheckModule groundedCheckModule;
@@ -267,9 +271,31 @@ public class PlayerMovementModule : PlayerModule
         else
         {
             moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
-        }    
+        }
+
+        moveVector = ForceAirMovespeed(moveVector);
 
         ApplyNewVelocityToRigidbody(moveVector);
+    }
+
+    public void JumpAfterHittingEnemy(Vector3 newVelocity, float duration, bool enableHorizontalMovement)
+    {
+        playerController.SetCurrentMoveStatus(MoveStatus.jumping);
+        ForceVelocityInDirectionOverDuration(newVelocity, duration, enableHorizontalMovement);
+        SetJumpAmount(1);
+    }
+
+    private Vector3 ForceAirMovespeed(Vector3 oldMovespeed)
+    {
+        if (forcedMovementTimer > 0)
+        {
+            forcedMovementTimer -= Time.deltaTime;
+            oldMovespeed = forcedVelocity;
+            oldMovespeed.x = inputVector.x * moveSpeed;
+            return oldMovespeed;
+        }
+
+        return oldMovespeed;
     }
 
     private void ManageCoyoteTime()
@@ -278,6 +304,13 @@ public class PlayerMovementModule : PlayerModule
         {
             coyoteTimeUsed += Time.deltaTime;
         }
+    }
+
+    public void ForceVelocityInDirectionOverDuration(Vector3 newVelocity, float duration, bool enableHorizontalMovement)
+    {
+        forcedVelocity = newVelocity;
+        forcedMovementTimer = duration;
+        allowHorizontalMovement = enableHorizontalMovement;
     }
 
     //Function to keep debugging easy
