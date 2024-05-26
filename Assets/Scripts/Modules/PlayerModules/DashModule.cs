@@ -117,12 +117,12 @@ public class DashModule : PlayerModule
     }
 
 
-    private void BecomeIntangible()
+    public void BecomeIntangible()
     {
         gameObject.layer = Constants.Layers.PlayerIntangible;
     }
 
-    private void BecomeTangible()
+    public void BecomeTangible()
     {
         gameObject.layer = Constants.Layers.Player;
     }

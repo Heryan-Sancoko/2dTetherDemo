@@ -8,6 +8,7 @@ public class PlayerController : EntityController
 {
     [SerializeField] private List<PlayerModule> moduleList = new List<PlayerModule>();
     [SerializeField] private PlayerMovementModule playerMovementModule;
+    [SerializeField] private DashModule playerDashModule;
     private Rigidbody rbody;
     public Rigidbody Rbody => rbody;
 
@@ -27,6 +28,9 @@ public class PlayerController : EntityController
             {
                 case PlayerMovementModule:
                     playerMovementModule = module as PlayerMovementModule;
+                    break;
+                case DashModule:
+                    playerDashModule = module as DashModule;
                     break;
             }
         }
@@ -66,14 +70,24 @@ public class PlayerController : EntityController
         playerMovementModule.JumpAfterHittingEnemy(velocity, seconds, enableHorizontalMovement);
     }
 
-    public void ForceVelocityOverDuration(Vector3 velocity, float seconds, bool EnableHorizontalMovement)
+    public void ForceVelocityOverDuration(Vector3 velocity, float seconds, bool EnableHorizontalMovement, MoveStatus newMoveStatus)
     {
-        playerMovementModule.ForceVelocityInDirectionOverDuration(velocity, seconds, EnableHorizontalMovement);
+        playerMovementModule.ForceVelocityInDirectionOverDuration(velocity, seconds, EnableHorizontalMovement, newMoveStatus);
     }
 
     public void SetCurrentMoveStatus(MoveStatus newMoveStatus)
     {
         currentMoveStatus = newMoveStatus;
+    }
+
+    public void BecomeTangible()
+    {
+        playerDashModule.BecomeTangible();
+    }
+
+    public void BecomeIntangible()
+    {
+        playerDashModule.BecomeIntangible();
     }
 
     public T GetModule<T>() where T : PlayerModule

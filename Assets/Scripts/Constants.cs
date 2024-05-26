@@ -13,6 +13,7 @@ public static class Constants
         public static int Aim = 3;
         public static int Dash = 4;
         public static int Attack = 5;
+        public static int HeldAttack = 6;
     }
 
     public static class Layers

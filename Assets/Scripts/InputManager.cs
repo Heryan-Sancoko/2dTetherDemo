@@ -14,6 +14,7 @@ public class InputManager : Singleton<InputManager>
     public InputAction Aim;
     public InputAction Dash;
     public InputAction Attack;
+    public InputAction HeldAttack;
 
     public override void Awake()
     {
@@ -37,6 +38,9 @@ public class InputManager : Singleton<InputManager>
 
         Attack = playerInput.currentActionMap.actions[Constants.ActionMapActions.Attack];
         Attack.Enable();
+
+        HeldAttack = playerInput.currentActionMap.actions[Constants.ActionMapActions.HeldAttack];
+        HeldAttack.Enable();
     }
 
 

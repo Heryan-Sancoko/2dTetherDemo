@@ -28,7 +28,20 @@ public class PlayerAttackModule : PlayerModule
         weapon.gameObject.SetActive(false);
         playerMovementModule = playerController.GetModule<PlayerMovementModule>();
         inputManager = InputManager.Instance;
+
         inputManager.Attack.performed += OnAttack;
+    }
+
+    public void OnHeldStarted(InputAction.CallbackContext callback)
+    {
+        Debug.LogError("HELD STARTED");
+    }
+
+    public void OnHeldAttack(InputAction.CallbackContext callback)
+    {
+        Debug.LogError("HELD ATTACK");
+        OnAttack(callback);
+        playerMovementModule.ForceVelocityInDirectionOverDuration(weaponHolder.forward*20, 0.25f, false, MoveStatus.airHop);
     }
 
     public void OnAttack(InputAction.CallbackContext callback)

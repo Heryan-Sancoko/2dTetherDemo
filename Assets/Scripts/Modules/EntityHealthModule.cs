@@ -7,6 +7,7 @@ public class EntityHealthModule : EntityModule
 {
     [SerializeField] protected float maxHealth;
     [SerializeField] protected float currentHealth;
+    public float CurrentHealth => currentHealth;
     public UnityAction KillEntity;
 
     public virtual void TakeDamage(float damageAmount)

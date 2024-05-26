@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "HeldAttack",
+                    "type": "Button",
+                    "id": "19ff5a2e-a6d0-4598-890a-d5dfcc323d9d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "SlowTap(duration=0.2)",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -219,10 +228,21 @@
                     "name": "",
                     "id": "0468170f-6d88-430e-90a1-ea167302cff8",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Tap",
                     "processors": "",
                     "groups": "",
                     "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "057f226c-c0f2-4ed1-8ae5-0fcf86673a97",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HeldAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

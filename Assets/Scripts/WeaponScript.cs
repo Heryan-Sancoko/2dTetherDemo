@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.InputSystem;
 
 public class WeaponScript : MonoBehaviour
 {
@@ -11,8 +11,10 @@ public class WeaponScript : MonoBehaviour
     [SerializeField] protected List<Collider> hitColliders = new List<Collider>();
     public Animator WeaponAnim => weaponAnim;
     [SerializeField] protected EntityModule AttackModule;
+    protected PlayerAttackModule playerAttackModule = null;
     protected bool AttackStarted = false;
     protected float currentDamage;
+    protected Transform firstKilledEnemy;
 
     public virtual void ConfigureWeapon(LayerMask mirrorMask, EntityModule newAttackModule)
     {
@@ -22,14 +24,26 @@ public class WeaponScript : MonoBehaviour
         switch (newAttackModule)
         {
             case PlayerAttackModule:
-                currentDamage = (newAttackModule as PlayerAttackModule).currentDamage;
+                playerAttackModule = newAttackModule as PlayerAttackModule;
+                currentDamage = playerAttackModule.currentDamage;
                 break;
             default:
                 break;
         }
     }
 
-    private void Update()
+
+    public virtual void StartChargeAttack(InputAction.CallbackContext callback)
+    {
+        
+    }
+
+    public virtual void DoChargeAttack(InputAction.CallbackContext callback)
+    {
+        
+    }
+
+    protected virtual void Update()
     {
         if (AttackStarted)
             PerformAttack();
@@ -54,6 +68,7 @@ public class WeaponScript : MonoBehaviour
     {
         hitColliders.Clear();
         AttackStarted = false;
+        firstKilledEnemy = null;
     }
 
     public virtual void ConcealWeapon()
@@ -61,7 +76,7 @@ public class WeaponScript : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    protected void AddNewCollidersToHitList(RaycastHit[] rayColliders)
+    protected virtual void AddNewCollidersToHitList(RaycastHit[] rayColliders)
     {
         if (rayColliders.Length == 0)
             return;
@@ -86,6 +101,10 @@ public class WeaponScript : MonoBehaviour
                     }
 
                     healthModule.TakeDamage(damage);
+
+                    if (healthModule.CurrentHealth <= 0 && firstKilledEnemy == null)
+                        firstKilledEnemy = rayHit.transform;
+
                     hitColliders.Add(rayHit.collider);
                 }
             }

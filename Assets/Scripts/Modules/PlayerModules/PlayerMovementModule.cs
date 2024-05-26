@@ -257,6 +257,7 @@ public class PlayerMovementModule : PlayerModule
     private void ApplyStandardMovement()
     {
         Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
+        moveVector = ForceAirMovespeed(moveVector);
         ApplyNewVelocityToRigidbody(moveVector);
     }
 
@@ -281,7 +282,7 @@ public class PlayerMovementModule : PlayerModule
     public void JumpAfterHittingEnemy(Vector3 newVelocity, float duration, bool enableHorizontalMovement)
     {
         playerController.SetCurrentMoveStatus(MoveStatus.jumping);
-        ForceVelocityInDirectionOverDuration(newVelocity, duration, enableHorizontalMovement);
+        ForceVelocityInDirectionOverDuration(newVelocity, duration, enableHorizontalMovement, MoveStatus.airHop);
         SetJumpAmount(1);
     }
 
@@ -290,8 +291,18 @@ public class PlayerMovementModule : PlayerModule
         if (forcedMovementTimer > 0)
         {
             forcedMovementTimer -= Time.deltaTime;
+
             oldMovespeed = forcedVelocity;
-            oldMovespeed.x = inputVector.x * moveSpeed;
+            if (allowHorizontalMovement)
+                oldMovespeed.x = inputVector.x * moveSpeed;
+
+            if (forcedMovementTimer <= 0)
+            {
+                SelectBestMoveStatusFromContext();
+                oldMovespeed = Vector3.zero;
+                playerController.BecomeTangible();
+            }
+
             return oldMovespeed;
         }
 
@@ -306,11 +317,12 @@ public class PlayerMovementModule : PlayerModule
         }
     }
 
-    public void ForceVelocityInDirectionOverDuration(Vector3 newVelocity, float duration, bool enableHorizontalMovement)
+    public void ForceVelocityInDirectionOverDuration(Vector3 newVelocity, float duration, bool enableHorizontalMovement, MoveStatus newMoveStatus)
     {
         forcedVelocity = newVelocity;
         forcedMovementTimer = duration;
         allowHorizontalMovement = enableHorizontalMovement;
+        playerController.SetCurrentMoveStatus(newMoveStatus);
     }
 
     //Function to keep debugging easy
