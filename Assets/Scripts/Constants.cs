@@ -28,5 +28,6 @@ public static class Constants
     public static class AnimationPrams
     {
         public static string StartAttack = "StartAttack";
+        public static string StartHeldAttack = "StartHeldAttack";
     }
 }

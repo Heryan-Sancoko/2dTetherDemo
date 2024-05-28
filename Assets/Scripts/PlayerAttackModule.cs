@@ -52,12 +52,22 @@ public class PlayerAttackModule : PlayerModule
         currentAttackCooldown = weaponData.baseAttackCooldown;
 
 
-
         //enable weapon
         weapon.gameObject.SetActive(true);
-        weapon.WeaponAnim.SetTrigger(Constants.AnimationPrams.StartAttack);
+
+        if (callback.action == inputManager.Attack)
+            weapon.WeaponAnim.SetTrigger(Constants.AnimationPrams.StartAttack);
+        else
+            weapon.WeaponAnim.SetTrigger(Constants.AnimationPrams.StartHeldAttack);
+
         Vector3 mousePos = playerController.GetMouseDirection();
-        weaponHolder.transform.LookAt(transform.position + mousePos, Vector3.up);
+        Vector3 upDir = Vector3.up;
+        if (mousePos.x > transform.position.x)
+            upDir = Vector3.up + Vector3.left;
+        else
+            upDir = Vector3.up + Vector3.right;
+
+        weaponHolder.transform.LookAt(transform.position + mousePos, upDir);
     }
 
     public void JumpOnHitEnemy()

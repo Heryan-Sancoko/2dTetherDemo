@@ -14,18 +14,23 @@ public class DaggerWeaponScript : WeaponScript
         InputManager.Instance.HeldAttack.performed += DoChargeAttack;
     }
 
+    public override void StartAttack()
+    {
+        base.StartAttack();
+    }
+
     public override void StartChargeAttack(InputAction.CallbackContext callback)
     {
         base.StartChargeAttack(callback);
         if (playerAttackModule != null)
         {
             playerAttackModule.OnHeldStarted(callback);
-            isChargedAttack = true;
         }
     }
 
     public override void DoChargeAttack(InputAction.CallbackContext callback)
     {
+        isChargedAttack = true;
         base.DoChargeAttack(callback);
         if (playerAttackModule != null)
         {
@@ -36,6 +41,12 @@ public class DaggerWeaponScript : WeaponScript
         }
     }
 
+    public override void EndAttack()
+    {
+        base.EndAttack();
+        isChargedAttack = false;
+    }
+
     protected override void AddNewCollidersToHitList(RaycastHit[] rayColliders)
     {
         base.AddNewCollidersToHitList(rayColliders);
@@ -43,23 +54,24 @@ public class DaggerWeaponScript : WeaponScript
         if (!isChargedAttack)
             return;
 
-        if (playerAttackModule != null && playerAttackModule.Controller.CurrentMoveStatus == MoveStatus.airHop && isChargedAttack)
+        if (playerAttackModule != null && playerAttackModule.Controller.CurrentMoveStatus == MoveStatus.airHop)
         {
             if (firstKilledEnemy!=null)
             {
                 StartCoroutine(ChainDash());
+                EndAttack();
             }
         }
     }
 
     private IEnumerator ChainDash()
     {
-        //playerAttackModule.transform.position = firstKilledEnemy.position;
+        playerAttackModule.transform.position = firstKilledEnemy.position;
+        firstKilledEnemy = null;
         playerAttackModule.Controller.ForceVelocityOverDuration(Vector3.zero, 0.25f, false, MoveStatus.airHop);
         yield return new WaitForSeconds(0.25f);
 
         playerAttackModule.Controller.BecomeIntangible();
-        firstKilledEnemy = null;
         DoChargeAttack(new InputAction.CallbackContext());
         yield return null;
     }
