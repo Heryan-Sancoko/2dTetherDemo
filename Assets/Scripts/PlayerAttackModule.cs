@@ -41,7 +41,7 @@ public class PlayerAttackModule : PlayerModule
     {
         Debug.LogError("HELD ATTACK");
         OnAttack(callback);
-        playerMovementModule.ForceVelocityInDirectionOverDuration(weaponHolder.forward*20, 0.25f, false, MoveStatus.airHop);
+        //playerMovementModule.ForceVelocityInDirectionOverDuration(weaponHolder.forward*20, 0.25f, false, MoveStatus.airHop);
     }
 
     public void OnAttack(InputAction.CallbackContext callback)
@@ -70,9 +70,22 @@ public class PlayerAttackModule : PlayerModule
         weaponHolder.transform.LookAt(transform.position + mousePos, upDir);
     }
 
+    public void DoCustomAttack(string animationParameter)
+    {
+        weapon.gameObject.SetActive(true);
+        weapon.WeaponAnim.SetTrigger(animationParameter);
+
+        Vector3 mousePos = transform.position + playerController.GetMouseDirection();
+        Vector3 look = (mousePos.x > transform.position.x) ? Vector3.right : Vector3.left;
+
+        weaponHolder.transform.LookAt(transform.position + look, Vector3.up);
+
+    }
+
     public void JumpOnHitEnemy()
     {
-        playerController.JumpOnEnemyHit(Vector3.up*5, 0.1f, true);
+        if (!playerController.GroundedModule.IsGrounded)
+        playerController.JumpOnEnemyHit(Vector3.up*7, 0.2f, true);
     }
 
     public override void UpdatePlayerModule()

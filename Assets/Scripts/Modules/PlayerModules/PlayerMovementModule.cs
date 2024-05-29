@@ -167,6 +167,8 @@ public class PlayerMovementModule : PlayerModule
         {
             AerialMovement();
         }
+
+        ClampVelocity();
     }
 
     private void GroundedMovement()

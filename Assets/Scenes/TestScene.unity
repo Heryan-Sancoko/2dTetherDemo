@@ -1221,7 +1221,7 @@ Transform:
   m_GameObject: {fileID: 809880097}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1497469398}
@@ -1361,6 +1361,7 @@ MonoBehaviour:
   snapAmount: 0.1
   cameraLeashLength: 3
   mousePosLerpSpeed: 0.1
+  cameraLerpSpeed: 0.2
   CurrentCamStyle: 1
 --- !u!1 &1074263454
 GameObject:
@@ -1875,6 +1876,7 @@ MonoBehaviour:
   - {fileID: 1497469405}
   playerMovementModule: {fileID: 0}
   playerDashModule: {fileID: 0}
+  groundedCheckModule: {fileID: 0}
   currentMoveStatus: 0
 --- !u!135 &1497469395
 SphereCollider:
@@ -2036,7 +2038,7 @@ MonoBehaviour:
   inactiveNodes: []
   tetherSpeed: 10
   nodeDistanceFromCollision: 0.5
-  swingSpeed: 20
+  swingSpeed: 15
   swingAcceleration: 0.1
   tetherRange: 500
   tetherAnchorRadius: 1

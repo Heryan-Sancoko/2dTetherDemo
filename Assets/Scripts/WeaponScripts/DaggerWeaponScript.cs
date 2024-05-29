@@ -54,7 +54,7 @@ public class DaggerWeaponScript : WeaponScript
         if (!isChargedAttack)
             return;
 
-        if (playerAttackModule != null && playerAttackModule.Controller.CurrentMoveStatus == MoveStatus.airHop)
+        if (playerAttackModule != null)
         {
             if (firstKilledEnemy!=null)
             {
@@ -69,10 +69,11 @@ public class DaggerWeaponScript : WeaponScript
         playerAttackModule.transform.position = firstKilledEnemy.position;
         firstKilledEnemy = null;
         playerAttackModule.Controller.ForceVelocityOverDuration(Vector3.zero, 0.25f, false, MoveStatus.airHop);
-        yield return new WaitForSeconds(0.25f);
-
-        playerAttackModule.Controller.BecomeIntangible();
-        DoChargeAttack(new InputAction.CallbackContext());
+        playerAttackModule.DoCustomAttack(Constants.AnimationPrams.StartSpinAttack);
+        //yield return new WaitForSeconds(0.25f);
+        //
+        //playerAttackModule.Controller.BecomeIntangible();
+        //DoChargeAttack(new InputAction.CallbackContext());
         yield return null;
     }
 

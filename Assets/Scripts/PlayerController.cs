@@ -9,6 +9,8 @@ public class PlayerController : EntityController
     [SerializeField] private List<PlayerModule> moduleList = new List<PlayerModule>();
     [SerializeField] private PlayerMovementModule playerMovementModule;
     [SerializeField] private DashModule playerDashModule;
+    [SerializeField] private GroundedCheckModule groundedCheckModule;
+    public GroundedCheckModule GroundedModule => groundedCheckModule;
     private Rigidbody rbody;
     public Rigidbody Rbody => rbody;
 
@@ -31,6 +33,9 @@ public class PlayerController : EntityController
                     break;
                 case DashModule:
                     playerDashModule = module as DashModule;
+                    break;
+                case GroundedCheckModule:
+                    groundedCheckModule = module as GroundedCheckModule;
                     break;
             }
         }

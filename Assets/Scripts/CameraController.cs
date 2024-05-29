@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float snapAmount;
     [SerializeField] private float cameraLeashLength;
     [SerializeField] private float mousePosLerpSpeed;
+    [SerializeField] private float cameraLerpSpeed;
     [SerializeField] private CameraStyle CurrentCamStyle;
     private Camera mCam;
     private float zOffset;
@@ -39,8 +40,7 @@ public class CameraController : MonoBehaviour
                 Vector3 mousePos = mCam.ScreenToWorldPoint(Input.mousePosition);
                 mousePos.z = 0;
                 Vector3 newPos2 = Vector3.Lerp(mousePos, playerPos, snapAmount) - playerPos;
-                Vector3 clamped2 = Vector3.ClampMagnitude(newPos2, cameraLeashLength);
-                transform.position = Vector3.Lerp(transform.position, playerPos + clamped2, mousePosLerpSpeed);
+                transform.position = Vector3.Lerp(transform.position, playerPos + Vector3.ClampMagnitude(newPos2, cameraLeashLength), cameraLerpSpeed);
                 break;
         }
     }

@@ -29,5 +29,6 @@ public static class Constants
     {
         public static string StartAttack = "StartAttack";
         public static string StartHeldAttack = "StartHeldAttack";
+        public static string StartSpinAttack = "StartSpinAttack";
     }
 }
