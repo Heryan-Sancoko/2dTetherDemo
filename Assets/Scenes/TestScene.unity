@@ -329,6 +329,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &144092530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,6 +620,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &429533100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,6 +784,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &440989391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1430,6 +1442,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &1074263458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1815,6 +1831,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &1346814542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1827,8 +1847,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daf99c3834a354bbd9a35609fd0d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
-  currentHealth: 1
+  maxHealth: 5
+  currentHealth: 5
 --- !u!1 &1497469393
 GameObject:
   m_ObjectHideFlags: 0
@@ -1992,7 +2012,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 100000
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -2015,7 +2035,7 @@ MonoBehaviour:
   groundedDistanceCheck: 1
   groundedLayerMask:
     serializedVersion: 2
-    m_Bits: 2147483647
+    m_Bits: 311
 --- !u!114 &1497469402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2187,6 +2207,37 @@ MonoBehaviour:
   weaponHolder: {fileID: 809880098}
   currentDamage: 1
   currentAttackCooldown: 0.2
+--- !u!1 &1685247038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1685247039}
+  m_Layer: 0
+  m_Name: CameraArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1685247039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685247038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.727403, y: -2.4924612, z: -5.0143833}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1724810730
 GameObject:
   m_ObjectHideFlags: 0
@@ -2254,6 +2305,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &1724810734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2481,8 +2536,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daf99c3834a354bbd9a35609fd0d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
-  currentHealth: 1
+  maxHealth: 5
+  currentHealth: 5
 --- !u!114 &2003078325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2497,6 +2552,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentEnemyType: 0
   movespeed: 1
+  attackRange: 0
+  aggroRange: 0
+  attackWindupTime: 0
+  currentMoveStatus: 0
 --- !u!114 &2003078326
 MonoBehaviour:
   m_ObjectHideFlags: 0

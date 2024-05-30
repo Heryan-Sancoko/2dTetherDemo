@@ -15,6 +15,7 @@ public class WeaponScript : MonoBehaviour
     protected bool AttackStarted = false;
     protected float currentDamage;
     protected Transform firstKilledEnemy;
+    protected Vector3 firstKilledEnemyPosition;
 
     public virtual void ConfigureWeapon(LayerMask mirrorMask, EntityModule newAttackModule)
     {
@@ -103,7 +104,10 @@ public class WeaponScript : MonoBehaviour
                     healthModule.TakeDamage(damage);
 
                     if (healthModule.CurrentHealth <= 0 && firstKilledEnemy == null)
+                    {
                         firstKilledEnemy = rayHit.transform;
+                        firstKilledEnemyPosition = firstKilledEnemy.position;
+                    }
 
                     hitColliders.Add(rayHit.collider);
                 }

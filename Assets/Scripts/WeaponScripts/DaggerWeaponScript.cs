@@ -58,6 +58,7 @@ public class DaggerWeaponScript : WeaponScript
         {
             if (firstKilledEnemy!=null)
             {
+                playerAttackModule.Controller.BecomeIntangible();
                 StartCoroutine(ChainDash());
                 EndAttack();
             }
@@ -66,13 +67,14 @@ public class DaggerWeaponScript : WeaponScript
 
     private IEnumerator ChainDash()
     {
-        playerAttackModule.transform.position = firstKilledEnemy.position;
+        playerAttackModule.transform.position = firstKilledEnemyPosition;
         firstKilledEnemy = null;
+        firstKilledEnemyPosition = Vector3.zero;
         playerAttackModule.Controller.ForceVelocityOverDuration(Vector3.zero, 0.25f, false, MoveStatus.airHop);
         playerAttackModule.DoCustomAttack(Constants.AnimationPrams.StartSpinAttack);
         //yield return new WaitForSeconds(0.25f);
         //
-        //playerAttackModule.Controller.BecomeIntangible();
+        //
         //DoChargeAttack(new InputAction.CallbackContext());
         yield return null;
     }

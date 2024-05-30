@@ -6,7 +6,13 @@ public class StandardEnemyMovementModule : EnemyModule
 {
     [SerializeField] private EnemyType currentEnemyType;
     [SerializeField] private float movespeed;
+    [SerializeField] private float attackRange;
+    [SerializeField] private float aggroRange;
+    [SerializeField] private float attackWindupTime;
+    [SerializeField] private EnemyStatus currentMoveStatus;
     private PlayerController player;
+    private bool attackProcessHasStarted;
+    private float currentAttackWindup;
 
 
     public override void AddController(EntityController newController)
@@ -30,6 +36,8 @@ public class StandardEnemyMovementModule : EnemyModule
                 HomingMovement();
                 break;
             case EnemyType.spacing:
+                SpacingMovement();
+                //WindUpAttack();
                 break;
             case EnemyType.turret:
                 break;
@@ -48,7 +56,22 @@ public class StandardEnemyMovementModule : EnemyModule
     //if spacing, move to a distance from the player. Once there, do your attack.
     private void SpacingMovement()
     {
-        
+        if (Vector3.Distance(transform.position, player.transform.position) > attackRange)
+        {
+            HomingMovement();
+        }
+        else
+        {
+            StartAttackProcess();
+        }
+
+    }
+
+    private void StartAttackProcess()
+    {
+        //wind up attack
+        //aim at player
+        //set aim timer
     }
 
     //if turret, don't move, just shoot.

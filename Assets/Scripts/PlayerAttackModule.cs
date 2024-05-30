@@ -34,12 +34,10 @@ public class PlayerAttackModule : PlayerModule
 
     public void OnHeldStarted(InputAction.CallbackContext callback)
     {
-        Debug.LogError("HELD STARTED");
     }
 
     public void OnHeldAttack(InputAction.CallbackContext callback)
     {
-        Debug.LogError("HELD ATTACK");
         OnAttack(callback);
         //playerMovementModule.ForceVelocityInDirectionOverDuration(weaponHolder.forward*20, 0.25f, false, MoveStatus.airHop);
     }
@@ -60,25 +58,27 @@ public class PlayerAttackModule : PlayerModule
         else
             weapon.WeaponAnim.SetTrigger(Constants.AnimationPrams.StartHeldAttack);
 
-        Vector3 mousePos = playerController.GetMouseDirection();
-        Vector3 upDir = Vector3.up;
-        if (mousePos.x > transform.position.x)
-            upDir = Vector3.up + Vector3.left;
-        else
-            upDir = Vector3.up + Vector3.right;
+        HaveWeaponLookTowardsAim();
 
-        weaponHolder.transform.LookAt(transform.position + mousePos, upDir);
+    }
+
+    private void HaveWeaponLookTowardsAim()
+    {
+        Vector3 mousePos = playerController.GetMouseDirection();
+        mousePos.z = transform.position.z;
+
+        Vector3 lookPoint = transform.position + mousePos;
+        lookPoint.z = transform.position.z;
+
+        weaponHolder.transform.LookAt(lookPoint, Vector3.up);
     }
 
     public void DoCustomAttack(string animationParameter)
     {
         weapon.gameObject.SetActive(true);
         weapon.WeaponAnim.SetTrigger(animationParameter);
+        HaveWeaponLookTowardsAim();
 
-        Vector3 mousePos = transform.position + playerController.GetMouseDirection();
-        Vector3 look = (mousePos.x > transform.position.x) ? Vector3.right : Vector3.left;
-
-        weaponHolder.transform.LookAt(transform.position + look, Vector3.up);
 
     }
 

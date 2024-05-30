@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum EnemyType { homing, spacing, turret }
+public enum EnemyStatus {idle, moving, windingUpAttack, attacking, gettingHurt, stunned}
 
 public class EnemyController : EntityController
 {
