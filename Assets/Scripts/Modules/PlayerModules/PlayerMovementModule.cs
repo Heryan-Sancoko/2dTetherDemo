@@ -226,7 +226,12 @@ public class PlayerMovementModule : PlayerModule
             else
                 SelectBestMoveStatusFromContext();
 
-            Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, FastFallSpeed, 0);
+            float fallspeed = FastFallSpeed;
+            if (inputmanager.Jump.phase == InputActionPhase.Performed)
+            {
+                fallspeed = 0;
+            }
+            Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, fallspeed, 0);
             ApplyNewVelocityToRigidbody(moveVector);
 
         }
@@ -276,9 +281,13 @@ public class PlayerMovementModule : PlayerModule
             moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
         }
 
+
         moveVector = ForceAirMovespeed(moveVector);
 
         ApplyNewVelocityToRigidbody(moveVector);
+
+        if (inputmanager.Jump.phase == InputActionPhase.Performed)
+            SlowFall();
     }
 
     public void JumpAfterHittingEnemy(Vector3 newVelocity, float duration, bool enableHorizontalMovement)

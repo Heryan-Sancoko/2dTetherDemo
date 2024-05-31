@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MoveStatus { idle, jumping, moving, tethering, dashing, attacking, airHop, passive, stunned };
+public enum MoveStatus { idle, jumping, floating, moving, tethering, dashing, attacking, airHop, passive, stunned };
 
 public class PlayerController : EntityController
 {

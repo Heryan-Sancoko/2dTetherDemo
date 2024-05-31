@@ -6,6 +6,7 @@ public class StandardEnemyMovementModule : EnemyModule
 {
     [SerializeField] private EnemyType currentEnemyType;
     [SerializeField] private float movespeed;
+    [SerializeField] private float turnSpeed;
     [SerializeField] private float attackRange;
     [SerializeField] private float aggroRange;
     [SerializeField] private float attackWindupTime;
@@ -19,6 +20,7 @@ public class StandardEnemyMovementModule : EnemyModule
     {
         base.AddController(newController);
         player = EnemyManager.Instance.PlayerController;
+        transform.LookAt(player.transform, Vector3.up);
     }
 
     public override void UpdateEnemyModule()
@@ -49,8 +51,20 @@ public class StandardEnemyMovementModule : EnemyModule
     //if homing, just move towards player at a flat speed.
     private void HomingMovement()
     {
-        Vector3 newVel = (player.transform.position - transform.position).normalized * movespeed;
-        ApplyNewVelocityToRigidbody(newVel);
+
+        Vector3 targetDirection = player.transform.position - transform.position;
+        Vector3 projectedTargetDirection = Vector3.ProjectOnPlane(targetDirection, Vector3.forward);
+
+        Quaternion targetRotation = Quaternion.LookRotation(projectedTargetDirection, Vector3.forward);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed);
+
+
+
+        //transform.rotation = Quaternion.Euler(targetAngle, 90, 0);
+
+        //Vector3 newVel = (player.transform.position - transform.position).normalized * movespeed;
+        ApplyNewVelocityToRigidbody(transform.forward*movespeed);
     }
 
     //if spacing, move to a distance from the player. Once there, do your attack.
@@ -83,6 +97,9 @@ public class StandardEnemyMovementModule : EnemyModule
     private void ApplyNewVelocityToRigidbody(Vector3 newVelocity)
     {
         rbody.velocity = newVelocity;
+        Vector3 fixedZPos = transform.position;
+        fixedZPos.z = 0;
+        transform.position = fixedZPos;
     }
 
 
