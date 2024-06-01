@@ -70,7 +70,7 @@ public class DaggerWeaponScript : WeaponScript
         playerAttackModule.transform.position = firstKilledEnemyPosition;
         firstKilledEnemy = null;
         firstKilledEnemyPosition = Vector3.zero;
-        playerAttackModule.Controller.ForceVelocityOverDuration(Vector3.zero, 0.25f, false, MoveStatus.airHop);
+        playerAttackModule.Controller.ForceVelocityOverDuration(Vector3.zero, 0.5f, false, MoveStatus.airHop);
         playerAttackModule.DoCustomAttack(Constants.AnimationPrams.StartSpinAttack);
         //yield return new WaitForSeconds(0.25f);
         //

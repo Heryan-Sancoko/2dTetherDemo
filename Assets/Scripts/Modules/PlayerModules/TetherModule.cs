@@ -37,6 +37,10 @@ public class TetherModule : PlayerModule
     private float ClosestDistance;
     private float currentSwingSpeed;
 
+    private Vector3 testLineOrigin;
+    private Vector3 testLineReflectPoint;
+    private Vector3 testLineDirection;
+    private Vector3 testLineDestination;
 
     private void Start()
     {
@@ -119,7 +123,48 @@ public class TetherModule : PlayerModule
 
         Vector3 tetherVelocity = (tetherTowards - transform.position).normalized * tetherSpeed;
         playerController.ApplyNewVelocityToRigidbody(tetherVelocity);
+
+        if (Vector3.Distance(transform.position, tetherTowards) < 1)
+        {
+            OnTetherCancelled(new InputAction.CallbackContext());
+            SpeedBoostAfterLandingTether(tetherTowards);
+        }
     }
+
+    private void SpeedBoostAfterLandingTether(Vector3 tetherPoint)
+    {
+        Vector3 newSpeed = (tetherPoint - transform.position).normalized;
+
+        if (Physics.Raycast(transform.position, newSpeed, out RaycastHit hitinfo, 3, tetherMask))
+        {
+
+            newSpeed = Vector3.Reflect(newSpeed * swingSpeed, hitinfo.normal);
+            if (hitinfo.normal == Vector3.up)
+            {
+                float horizontalSpeed = (newSpeed.x >0)? playerMovementModule.TopSpeed : -playerMovementModule.TopSpeed;
+                newSpeed = Vector3.right * horizontalSpeed;
+            }
+            testLineOrigin = transform.position;
+            testLineReflectPoint = hitinfo.point;
+            testLineDirection = newSpeed;
+            testLineDestination = hitinfo.point + (newSpeed * 3);
+            playerController.ForceVelocityOverDuration(newSpeed, 0.5f, true, MoveStatus.passive);
+            //playerController.ApplyNewVelocityToRigidbody(newSpeed);
+        }
+        else
+        {
+            playerController.ApplyNewVelocityToRigidbody(newSpeed*100);
+        }
+            
+
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(testLineOrigin, testLineReflectPoint);
+        Gizmos.DrawLine(testLineReflectPoint, testLineDestination);
+    }
+
 
     private Vector3 GetCurrentTetherPoint()
     {
@@ -148,7 +193,7 @@ public class TetherModule : PlayerModule
     private void CheckForSwingDirection()
     {
         MoveSwingAssistant();
-        if (playerMovementModule.InputVector != Vector2.zero)
+        if (playerMovementModule.InputVector != Vector2.zero && Vector3.Distance(transform.position, GetCurrentTetherPoint()) > 3)
         {
             float MovementToTetherDot = Vector3.Dot(swingAssistant.right, playerMovementModule.InputVector);
 

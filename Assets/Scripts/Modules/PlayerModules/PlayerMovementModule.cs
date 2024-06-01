@@ -11,6 +11,7 @@ public class PlayerMovementModule : PlayerModule
     public Vector2 InputVector => inputVector;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float topSpeed;
+    public float TopSpeed => topSpeed;
     private Rigidbody rbody;
 
 
@@ -30,7 +31,7 @@ public class PlayerMovementModule : PlayerModule
     private float usedJumpTime;
     private float coyoteTimeUsed;
 
-    private float forcedMovementTimer;
+    [SerializeField] private float forcedMovementTimer;
     private Vector3 forcedVelocity;
     private bool allowHorizontalMovement;
 
@@ -62,7 +63,7 @@ public class PlayerMovementModule : PlayerModule
 
     private void LateUpdate()
     {
-        ClampVelocity();
+        //ClampVelocity();
     }
 
     private void ClampVelocity()
@@ -150,6 +151,9 @@ public class PlayerMovementModule : PlayerModule
         {
             FastFall();
         }
+
+        if (forcedMovementTimer >= 0)
+            forcedMovementTimer -= Time.deltaTime;
     }
 
     public override void FixedUpdatePlayerModule()
@@ -211,7 +215,7 @@ public class PlayerMovementModule : PlayerModule
 
     private void SlowFall()
     {
-        Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, Mathf.Clamp(rbody.velocity.y, -SlowFallSpeed, rbody.velocity.y), 0);
+        Vector3 moveVector = new Vector3(inputVector.x * AdjustedMovespeed(), Mathf.Clamp(rbody.velocity.y, -SlowFallSpeed, rbody.velocity.y), 0);
         ApplyNewVelocityToRigidbody(moveVector);
     }
 
@@ -231,7 +235,8 @@ public class PlayerMovementModule : PlayerModule
             {
                 fallspeed = 0;
             }
-            Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, fallspeed, 0);
+
+            Vector3 moveVector = new Vector3(inputVector.x * AdjustedMovespeed(), fallspeed, 0);
             ApplyNewVelocityToRigidbody(moveVector);
 
         }
@@ -263,26 +268,27 @@ public class PlayerMovementModule : PlayerModule
 
     private void ApplyStandardMovement()
     {
-        Vector3 moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
-        moveVector = ForceAirMovespeed(moveVector);
+        Vector3 moveVector = new Vector3(inputVector.x * AdjustedMovespeed(), rbody.velocity.y, 0);
+        //moveVector = ForceAirMovespeed(moveVector);
         ApplyNewVelocityToRigidbody(moveVector);
+    }
+
+    private float AdjustedMovespeed()
+    {
+        if (Vector3.Dot(rbody.velocity.normalized, InputVector) > 0f &&
+            Mathf.Abs(rbody.velocity.x) > moveSpeed)
+        {
+            return Mathf.Abs(rbody.velocity.x);
+        }
+
+        return moveSpeed;
     }
 
     private void ApplyAirMovement()
     {
-        float HorizontalVelocity = Mathf.Abs(rbody.velocity.x);
-        Vector3 moveVector = Vector3.zero;
-        if (HorizontalVelocity > moveSpeed)
-        {
-            moveVector = new Vector3(inputVector.x * (Mathf.Lerp(HorizontalVelocity, moveSpeed, airDeceleration)), rbody.velocity.y, 0);
-        }
-        else
-        {
-            moveVector = new Vector3(inputVector.x * moveSpeed, rbody.velocity.y, 0);
-        }
+        Vector3 moveVector = new Vector3(inputVector.x * AdjustedMovespeed(), rbody.velocity.y, 0);
 
-
-        moveVector = ForceAirMovespeed(moveVector);
+        //moveVector = ForceAirMovespeed(moveVector);
 
         ApplyNewVelocityToRigidbody(moveVector);
 
@@ -292,25 +298,36 @@ public class PlayerMovementModule : PlayerModule
 
     public void JumpAfterHittingEnemy(Vector3 newVelocity, float duration, bool enableHorizontalMovement)
     {
-        playerController.SetCurrentMoveStatus(MoveStatus.jumping);
         ForceVelocityInDirectionOverDuration(newVelocity, duration, enableHorizontalMovement, MoveStatus.airHop);
         SetJumpAmount(1);
     }
 
     private Vector3 ForceAirMovespeed(Vector3 oldMovespeed)
     {
-        if (forcedMovementTimer > 0)
+        if (forcedMovementTimer >= 0)
         {
-            forcedMovementTimer -= Time.deltaTime;
-
             oldMovespeed = forcedVelocity;
             if (allowHorizontalMovement)
-                oldMovespeed.x = inputVector.x * moveSpeed;
+            {
+                if (inputVector.x!=0)
+                oldMovespeed = new Vector3(inputVector.x * AdjustedMovespeed(), forcedVelocity.y, 0);
+                else
+                    oldMovespeed = forcedVelocity;
+
+                //if (Vector3.Dot(rbody.velocity.normalized, InputVector) > 0.5f)
+                //{
+                //    oldMovespeed.x = InputVector.x * rbody.velocity.x;
+                //}
+                //else
+                //    oldMovespeed.x = inputVector.x * moveSpeed;
+            }
 
             if (forcedMovementTimer <= 0)
             {
+                //when we implement knockback on the player
+                //check if we need to reset speed to zero here
+                //and apply appropriate speed
                 SelectBestMoveStatusFromContext();
-                oldMovespeed = Vector3.zero;
                 playerController.BecomeTangible();
             }
 
@@ -339,6 +356,7 @@ public class PlayerMovementModule : PlayerModule
     //Function to keep debugging easy
     public void ApplyNewVelocityToRigidbody(Vector3 newVel)
     {
+        newVel = ForceAirMovespeed(newVel);
         rbody.velocity = newVel;
     }
 
@@ -348,7 +366,13 @@ public class PlayerMovementModule : PlayerModule
             playerController.SetCurrentMoveStatus(MoveStatus.jumping);
 
         usedJumpTime = availableJumpTime;
-        Vector3 JumpStopVelocity = new Vector3(rbody.velocity.x, 0, 0);
+        //Vector3 JumpStopVelocity = new Vector3(rbody.velocity.x, 0, 0);
+
+        float horizontalSpeed = rbody.velocity.x;
+        if (InputVector.x != 0)
+            horizontalSpeed = InputVector.x * AdjustedMovespeed();
+
+        Vector3 JumpStopVelocity = new Vector3(horizontalSpeed, rbody.velocity.y, 0);
         ApplyNewVelocityToRigidbody(JumpStopVelocity);
     }
 

@@ -102,7 +102,7 @@ public class DashModule : PlayerModule
 
         if (playerController.CurrentMoveStatus == MoveStatus.dashing)
         {
-            playerMovementModule.ApplyNewVelocityToRigidbody(Vector3.zero);
+            //playerMovementModule.ApplyNewVelocityToRigidbody(Vector3.zero);
             playerMovementModule.SelectBestMoveStatusFromContext();
         }
 
