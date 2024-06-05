@@ -11,6 +11,7 @@ public class PlayerAttackModule : PlayerModule
     [SerializeField] protected List<EnemyHealthModule> enemyHealthModuleList = new List<EnemyHealthModule>();
     [SerializeField] protected LayerMask enemyLayers;
     [SerializeField] protected Transform weaponHolder;
+    [SerializeField] protected float jumpAmountOnEnemyHit;
 
     public float currentDamage;
     public float currentAttackCooldown;
@@ -85,7 +86,7 @@ public class PlayerAttackModule : PlayerModule
     public void JumpOnHitEnemy()
     {
         if (!playerController.GroundedModule.IsGrounded)
-        playerController.JumpOnEnemyHit(Vector3.up*7, 0.2f, true);
+        playerController.JumpOnEnemyHit(Vector3.up*jumpAmountOnEnemyHit, 0.2f, true);
     }
 
     public override void UpdatePlayerModule()
