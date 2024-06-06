@@ -23,6 +23,9 @@ public static class Constants
         public static int PlayerHitbox = 7;
         public static int Enemy = 8;
         public static int EnemyIntangible = 9;
+        public static int Weapon = 10;
+        public static int Hazard = 11;
+        public static int FixedCamera = 12;
     }
 
     public static class AnimationPrams
