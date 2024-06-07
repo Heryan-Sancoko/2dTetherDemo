@@ -36,7 +36,6 @@ public class FixedCameraZone : MonoBehaviour
     {
         if (other.gameObject.layer == Constants.Layers.Player)
         {
-            Debug.LogError("player entered");
             AdjustCameraForArea();
         }
     }

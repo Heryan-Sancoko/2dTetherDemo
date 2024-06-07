@@ -153,7 +153,15 @@ public class PlayerMovementModule : PlayerModule
         }
 
         if (forcedMovementTimer >= 0)
+        {
             forcedMovementTimer -= Time.deltaTime;
+            {
+                if (playerController.CurrentMoveStatus == MoveStatus.attacking)
+                {
+                    ApplyNewVelocityToRigidbody(Vector3.zero);
+                }
+            }
+        }
     }
 
     public override void FixedUpdatePlayerModule()
@@ -322,14 +330,15 @@ public class PlayerMovementModule : PlayerModule
                 //    oldMovespeed.x = inputVector.x * moveSpeed;
             }
 
-            if (forcedMovementTimer <= 0)
-            {
-                //when we implement knockback on the player
-                //check if we need to reset speed to zero here
-                //and apply appropriate speed
-                SelectBestMoveStatusFromContext();
-                playerController.BecomeTangible();
-            }
+            //if (forcedMovementTimer <= 0)
+            //{
+            //    Debug.LogError("does this even proc?");
+            //    //when we implement knockback on the player
+            //    //check if we need to reset speed to zero here
+            //    //and apply appropriate speed
+            //    SelectBestMoveStatusFromContext();
+            //    playerController.BecomeTangible();
+            //}
 
             return oldMovespeed;
         }

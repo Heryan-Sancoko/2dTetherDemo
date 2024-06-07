@@ -15,6 +15,11 @@ public class StandardEnemyMovementModule : EnemyModule
     private bool attackProcessHasStarted;
     private float currentAttackWindup;
 
+    private Vector3 launchDirection;
+    private float launchSpeed;
+    private float launchTime;
+    private float currentLaunchTime;
+
 
     public override void AddController(EntityController newController)
     {
@@ -32,20 +37,40 @@ public class StandardEnemyMovementModule : EnemyModule
     {
         base.FixedUpdateEnemyModule();
 
-        switch (currentEnemyType)
+        switch (currentMoveStatus)
         {
-            case EnemyType.homing:
-                HomingMovement();
+            case EnemyStatus.attacking:
                 break;
-            case EnemyType.spacing:
-                SpacingMovement();
-                //WindUpAttack();
+            case EnemyStatus.gettingLaunched:
+                currentLaunchTime -= Time.deltaTime;
+                ApplyNewVelocityToRigidbody(launchDirection * launchSpeed);
+                if (currentLaunchTime <= 0)
+                    currentMoveStatus = EnemyStatus.idle;
                 break;
-            case EnemyType.turret:
+            case EnemyStatus.idle:
+                switch (currentEnemyType)
+                {
+                    case EnemyType.homing:
+                        HomingMovement();
+                        break;
+                    case EnemyType.spacing:
+                        SpacingMovement();
+                        //WindUpAttack();
+                        break;
+                    case EnemyType.turret:
+                        break;
+                    default:
+                        break;
+                }
                 break;
-            default:
+            case EnemyStatus.moving:
+                break;
+            case EnemyStatus.stunned:
+                break;
+            case EnemyStatus.windingUpAttack:
                 break;
         }
+
     }
 
     //if homing, just move towards player at a flat speed.
@@ -102,5 +127,12 @@ public class StandardEnemyMovementModule : EnemyModule
         transform.position = fixedZPos;
     }
 
+    public void LaunchEnemy(Vector3 newLaunchDirection, float newLaunchSpeed, float newLaunchDuration)
+    {
+        launchDirection = newLaunchDirection;
+        launchSpeed = newLaunchSpeed;
+        launchTime = currentLaunchTime = newLaunchDuration;
+        currentMoveStatus = EnemyStatus.gettingLaunched;
+    }
 
 }

@@ -2836,7 +2836,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   weaponHolder: {fileID: 809880098}
-  jumpAmountOnEnemyHit: 0
+  jumpAmountOnEnemyHit: 2
   currentDamage: 1
   currentAttackCooldown: 0.2
 --- !u!1 &1686805207
@@ -3340,7 +3340,7 @@ GameObject:
   - component: {fileID: 1974015953}
   - component: {fileID: 1974015952}
   - component: {fileID: 1974015951}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FixedCameraZone (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

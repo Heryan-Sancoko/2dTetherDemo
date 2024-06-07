@@ -17,11 +17,15 @@ public class PlayerAttackModule : PlayerModule
     public float currentAttackCooldown;
     private PlayerMovementModule playerMovementModule;
     private InputManager inputManager;
+    private int attackSwingCap;
+    private int currentAttackSwing;
 
     public override void AddController(EntityController newController)
     {
         base.AddController(newController);
         rbody = GetComponent<Rigidbody>();
+        attackSwingCap = weaponData.attackSwingAmount;
+        currentAttackSwing = 1;
         weapon = Instantiate(weaponData.weaponPrefab,weaponHolder).GetComponent<WeaponScript>();
         weapon.transform.localRotation = Quaternion.identity;
         weapon.transform.localPosition = Vector3.zero;
@@ -33,6 +37,16 @@ public class PlayerAttackModule : PlayerModule
         inputManager.Attack.performed += OnAttack;
     }
 
+    public void ResetAttackSwing()
+    {
+        currentAttackSwing = 1;
+    }
+
+    public void SetCustomAttackCooldown( float newAttackCooldown)
+    {
+        currentAttackCooldown = newAttackCooldown;
+    }
+
     public void OnHeldStarted(InputAction.CallbackContext callback)
     {
     }
@@ -40,7 +54,7 @@ public class PlayerAttackModule : PlayerModule
     public void OnHeldAttack(InputAction.CallbackContext callback)
     {
         OnAttack(callback);
-        //playerMovementModule.ForceVelocityInDirectionOverDuration(weaponHolder.forward*20, 0.25f, false, MoveStatus.airHop);
+        playerMovementModule.ForceVelocityInDirectionOverDuration(weaponHolder.forward*20, 0.25f, false, MoveStatus.attacking);
     }
 
     public void OnAttack(InputAction.CallbackContext callback)
@@ -55,7 +69,13 @@ public class PlayerAttackModule : PlayerModule
         weapon.gameObject.SetActive(true);
 
         if (callback.action == inputManager.Attack)
+        {
+            weapon.WeaponAnim.SetInteger(Constants.AnimationPrams.AttackSwing, currentAttackSwing);
             weapon.WeaponAnim.SetTrigger(Constants.AnimationPrams.StartAttack);
+            currentAttackSwing++;
+            if (currentAttackSwing > attackSwingCap)
+                currentAttackSwing = 1;
+        }
         else
             weapon.WeaponAnim.SetTrigger(Constants.AnimationPrams.StartHeldAttack);
 
@@ -79,8 +99,6 @@ public class PlayerAttackModule : PlayerModule
         weapon.gameObject.SetActive(true);
         weapon.WeaponAnim.SetTrigger(animationParameter);
         HaveWeaponLookTowardsAim();
-
-
     }
 
     public void JumpOnHitEnemy()

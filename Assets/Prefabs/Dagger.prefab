@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3112776506386030766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.59}
+  m_LocalPosition: {x: 0, y: 0, z: 5.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -114,6 +114,11 @@ MonoBehaviour:
   weaponAnim: {fileID: 4451413797649398284}
   hitColliders: []
   AttackModule: {fileID: 0}
+  thirdAttackCooldown: 0.25
+  chargedAttackExtraDamage: 1
+  pushBackLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!95 &4451413797649398284
 Animator:
   serializedVersion: 5
@@ -450,7 +455,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7686792098163815425}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.93}
+  m_LocalPosition: {x: 0, y: 0, z: 3.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -74,6 +74,7 @@ public class WeaponScript : MonoBehaviour
 
     public virtual void ConcealWeapon()
     {
+        playerAttackModule.ResetAttackSwing();
         gameObject.SetActive(false);
     }
 
