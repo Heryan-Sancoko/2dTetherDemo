@@ -19,6 +19,7 @@ public class PlayerAttackModule : PlayerModule
     private InputManager inputManager;
     private int attackSwingCap;
     private int currentAttackSwing;
+    public int CurrentAttackSwing => currentAttackSwing;
 
     public override void AddController(EntityController newController)
     {

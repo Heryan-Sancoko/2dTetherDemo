@@ -116,6 +116,7 @@ MonoBehaviour:
   AttackModule: {fileID: 0}
   thirdAttackCooldown: 0.25
   chargedAttackExtraDamage: 1
+  weaponKnockback: 20
   pushBackLayer:
     serializedVersion: 2
     m_Bits: 256

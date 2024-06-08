@@ -10,7 +10,6 @@ public class StandardEnemyMovementModule : EnemyModule
     [SerializeField] private float attackRange;
     [SerializeField] private float aggroRange;
     [SerializeField] private float attackWindupTime;
-    [SerializeField] private EnemyStatus currentMoveStatus;
     private PlayerController player;
     private bool attackProcessHasStarted;
     private float currentAttackWindup;
@@ -24,7 +23,7 @@ public class StandardEnemyMovementModule : EnemyModule
     public override void AddController(EntityController newController)
     {
         base.AddController(newController);
-        player = EnemyManager.Instance.PlayerController;
+        player = enemyController.playerController;
         transform.LookAt(player.transform, Vector3.up);
     }
 
@@ -37,7 +36,7 @@ public class StandardEnemyMovementModule : EnemyModule
     {
         base.FixedUpdateEnemyModule();
 
-        switch (currentMoveStatus)
+        switch (enemyController.CurrentEnemyStatus)
         {
             case EnemyStatus.attacking:
                 break;
@@ -45,9 +44,11 @@ public class StandardEnemyMovementModule : EnemyModule
                 currentLaunchTime -= Time.deltaTime;
                 ApplyNewVelocityToRigidbody(launchDirection * launchSpeed);
                 if (currentLaunchTime <= 0)
-                    currentMoveStatus = EnemyStatus.idle;
+                    enemyController.SetCurrentEnemyStatus(EnemyStatus.moving);
                 break;
             case EnemyStatus.idle:
+                break;
+            case EnemyStatus.moving:
                 switch (currentEnemyType)
                 {
                     case EnemyType.homing:
@@ -62,8 +63,6 @@ public class StandardEnemyMovementModule : EnemyModule
                     default:
                         break;
                 }
-                break;
-            case EnemyStatus.moving:
                 break;
             case EnemyStatus.stunned:
                 break;
@@ -132,7 +131,7 @@ public class StandardEnemyMovementModule : EnemyModule
         launchDirection = newLaunchDirection;
         launchSpeed = newLaunchSpeed;
         launchTime = currentLaunchTime = newLaunchDuration;
-        currentMoveStatus = EnemyStatus.gettingLaunched;
+        enemyController.SetCurrentEnemyStatus(EnemyStatus.gettingLaunched);
     }
 
 }

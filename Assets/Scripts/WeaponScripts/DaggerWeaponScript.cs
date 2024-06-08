@@ -7,6 +7,7 @@ public class DaggerWeaponScript : WeaponScript
 {
     [SerializeField] private float thirdAttackCooldown;
     [SerializeField] private float chargedAttackExtraDamage;
+    [SerializeField] private float weaponKnockback;
     [SerializeField] private LayerMask pushBackLayer;
     private bool isChargedAttack = false;
 
@@ -67,6 +68,17 @@ public class DaggerWeaponScript : WeaponScript
         {
             if (!hitColliders.Contains(rayHit.collider))
             {
+                //do knockback
+                if (rayHit.collider.TryGetComponent(out StandardEnemyMovementModule moveModule))
+                {
+                    if (playerAttackModule.CurrentAttackSwing == 1)
+                    {
+                        moveModule.LaunchEnemy((moveModule.transform.position - playerAttackModule.transform.position).normalized, weaponKnockback, 0.1f);
+                    }
+                }
+
+
+                //deduct health
                 if (rayHit.collider.TryGetComponent(out EntityHealthModule healthModule))
                 {
                     switch (AttackModule)
@@ -81,6 +93,8 @@ public class DaggerWeaponScript : WeaponScript
                     }
 
                     healthModule.TakeDamage(damage);
+
+
                     if (isChargedAttack)
                         healthModule.TakeDamage(chargedAttackExtraDamage);
 

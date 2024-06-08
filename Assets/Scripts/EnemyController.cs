@@ -11,9 +11,13 @@ public class EnemyController : EntityController
     [SerializeField] private Rigidbody rbody;
     public Rigidbody Rbody => rbody;
     private EnemyManager enemyManager;
+    public PlayerController playerController;
 
     private EnemyType currentEnemyType;
     public EnemyType CurrentEnemyType => currentEnemyType;
+
+    private EnemyStatus currentEnemyStatus;
+    public EnemyStatus CurrentEnemyStatus => currentEnemyStatus;
 
     [SerializeField] private List<EnemyModule> enemyModuleList = new List<EnemyModule>();
 
@@ -21,6 +25,7 @@ public class EnemyController : EntityController
     void Start()
     {
         enemyManager = EnemyManager.Instance;
+        playerController = enemyManager.PlayerController;
         foreach (EnemyModule module in enemyModuleList)
         {
             module.AddController(this);
@@ -42,6 +47,11 @@ public class EnemyController : EntityController
         {
             module.FixedUpdateEnemyModule();
         }
+    }
+
+    public void SetCurrentEnemyStatus(EnemyStatus newStatus)
+    {
+        currentEnemyStatus = newStatus;
     }
 
 
