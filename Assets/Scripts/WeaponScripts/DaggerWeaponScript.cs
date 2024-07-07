@@ -79,7 +79,7 @@ public class DaggerWeaponScript : WeaponScript
 
 
                 //deduct health
-                if (rayHit.collider.TryGetComponent(out EntityHealthModule healthModule))
+                if (rayHit.collider.TryGetComponent(out EnemyController healthModule))
                 {
                     switch (AttackModule)
                     {

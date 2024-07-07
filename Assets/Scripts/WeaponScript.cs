@@ -89,7 +89,7 @@ public class WeaponScript : MonoBehaviour
         {
             if (!hitColliders.Contains(rayHit.collider))
             {
-                if (rayHit.collider.TryGetComponent(out EntityHealthModule healthModule))
+                if (rayHit.collider.TryGetComponent(out EnemyController healthModule))
                 {
                     switch (AttackModule)
                     {

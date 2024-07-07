@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StandardEnemyMovementModule : EnemyModule
 {
-    [SerializeField] private EnemyType currentEnemyType;
+    private EnemyType currentEnemyType => enemyController.CurrentEnemyType;
     [SerializeField] private float movespeed;
     [SerializeField] private float turnSpeed;
     [SerializeField] private float attackRange;
@@ -47,8 +47,18 @@ public class StandardEnemyMovementModule : EnemyModule
                     enemyController.SetCurrentEnemyStatus(EnemyStatus.moving);
                 break;
             case EnemyStatus.idle:
+                if (enemyController.IsAggro)
+                    enemyController.SetCurrentEnemyStatus(EnemyStatus.moving);
                 break;
             case EnemyStatus.moving:
+
+                if (!enemyController.IsAggro)
+                {
+                    enemyController.SetCurrentEnemyStatus(EnemyStatus.idle);
+                    ApplyNewVelocityToRigidbody(Vector3.zero);
+                    break;
+                }
+
                 switch (currentEnemyType)
                 {
                     case EnemyType.homing:
@@ -100,16 +110,9 @@ public class StandardEnemyMovementModule : EnemyModule
         }
         else
         {
-            StartAttackProcess();
+            enemyController.StartAttackWindup();
         }
 
-    }
-
-    private void StartAttackProcess()
-    {
-        //wind up attack
-        //aim at player
-        //set aim timer
     }
 
     //if turret, don't move, just shoot.
@@ -118,7 +121,7 @@ public class StandardEnemyMovementModule : EnemyModule
         //I wonder if this really needs to exist?
     }
 
-    private void ApplyNewVelocityToRigidbody(Vector3 newVelocity)
+    public void ApplyNewVelocityToRigidbody(Vector3 newVelocity)
     {
         rbody.velocity = newVelocity;
         Vector3 fixedZPos = transform.position;
