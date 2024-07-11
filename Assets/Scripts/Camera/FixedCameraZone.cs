@@ -9,6 +9,10 @@ public class FixedCameraZone : MonoBehaviour
     [SerializeField] private Camera mainCam;
     [SerializeField] CameraController camControl;
 
+    [SerializeField] private List<EnemyController> enemiesToEnable = new List<EnemyController>();
+
+    private bool enemiesSpawnedAlready = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +41,16 @@ public class FixedCameraZone : MonoBehaviour
         if (other.gameObject.layer == Constants.Layers.Player)
         {
             AdjustCameraForArea();
+
+            if (!enemiesSpawnedAlready)
+            {
+                foreach (EnemyController enemy in enemiesToEnable)
+                {
+                    enemy.gameObject.SetActive(true);
+                    enemy.ToggleForceEnemyIdle(false);
+                }
+                enemiesSpawnedAlready = true;
+            }
         }
     }
 

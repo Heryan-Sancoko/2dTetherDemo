@@ -18,8 +18,8 @@ TagManager:
   - Weapon
   - Hazard
   - FixedCameraArea
-  - 
-  - 
+  - PlayerProjectile
+  - EnemyProjectile
   - 
   - 
   - 

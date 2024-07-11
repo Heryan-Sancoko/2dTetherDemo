@@ -1733,8 +1733,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daf99c3834a354bbd9a35609fd0d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
-  currentHealth: 5
+  maxHealth: 3
+  currentHealth: 3
 --- !u!114 &1145659158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1749,9 +1749,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movespeed: 3
   turnSpeed: 1
-  attackRange: 0
+  attackRange: 10
   aggroRange: 50
-  attackWindupTime: 0
+  forceIdle: 1
 --- !u!114 &1145659159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1841,7 +1841,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1145659155}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 50.739998, y: 23.53, z: 1.8711243}
+  m_LocalPosition: {x: 50.739998, y: 23.53, z: 0}
   m_LocalScale: {x: 1.7513, y: 1.7513, z: 1.7513}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1862,16 +1862,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cac7c784f23a8441848d3f60157a0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackWindupTime: 0
-  attackEndLagTime: 0
-  lockInAttackThreshold: 0
+  attackWindupTime: 1
+  attackEndLagTime: 1
+  lockInAttackThreshold: 0.5
   aggroRange: 30
-  lungeSpeed: 0
-  lungeDistance: 0
+  lungeSpeed: 20
+  lungeDistance: 10
   sphereCastRadius: 0
   sphereCastLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
+  bulletPrefab: {fileID: 2902453118678893369, guid: 793041aad96405941b48973f2ed20bb5, type: 3}
 --- !u!1 &1166187054
 GameObject:
   m_ObjectHideFlags: 0
@@ -2205,7 +2206,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &1320707080
 MonoBehaviour:
@@ -2219,8 +2220,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daf99c3834a354bbd9a35609fd0d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
-  currentHealth: 5
+  maxHealth: 3
+  currentHealth: 3
 --- !u!114 &1320707081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2234,10 +2235,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movespeed: 3
-  turnSpeed: 1
-  attackRange: 0
+  turnSpeed: 0.5
+  attackRange: 10
   aggroRange: 50
-  attackWindupTime: 0
+  forceIdle: 1
 --- !u!114 &1320707082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2252,7 +2253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rbody: {fileID: 1320707079}
   playerController: {fileID: 0}
-  currentEnemyType: 0
+  currentEnemyType: 2
   enemyModuleList:
   - {fileID: 1320707081}
   - {fileID: 1320707087}
@@ -2289,7 +2290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f57dd80b7a8882c4d8077e82d601ec0a, type: 2}
+  - {fileID: 2100000, guid: fa4e5c0159c34824abe8aca67e2bea15, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2327,7 +2328,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1320707078}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 68.8, y: 12.2, z: 1.8711243}
+  m_LocalPosition: {x: 68.8, y: 12.2, z: 0}
   m_LocalScale: {x: 1.7513, y: 1.7513, z: 1.7513}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2348,16 +2349,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cac7c784f23a8441848d3f60157a0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackWindupTime: 0
-  attackEndLagTime: 0
-  lockInAttackThreshold: 0
+  attackWindupTime: 1
+  attackEndLagTime: 1
+  lockInAttackThreshold: 0.5
   aggroRange: 30
-  lungeSpeed: 0
-  lungeDistance: 0
+  lungeSpeed: 20
+  lungeDistance: 10
   sphereCastRadius: 0
   sphereCastLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
+  bulletPrefab: {fileID: 2902453118678893369, guid: 793041aad96405941b48973f2ed20bb5, type: 3}
 --- !u!1 &1338252085
 GameObject:
   m_ObjectHideFlags: 0
@@ -2541,7 +2543,7 @@ MonoBehaviour:
   turnSpeed: 3
   attackRange: 0
   aggroRange: 50
-  attackWindupTime: 0
+  forceIdle: 1
 --- !u!114 &1346814542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2578,6 +2580,52 @@ MonoBehaviour:
   sphereCastLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  bulletPrefab: {fileID: 0}
+--- !u!1 &1352705709
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1352705711}
+  - component: {fileID: 1352705710}
+  m_Layer: 0
+  m_Name: BulletManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1352705710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352705709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4aab7abfcab21443a541e51fe5a321f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletList: []
+--- !u!4 &1352705711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352705709}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.18554, y: 15.331843, z: 19.658401}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 22
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1384346533
 GameObject:
   m_ObjectHideFlags: 0
@@ -2630,8 +2678,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daf99c3834a354bbd9a35609fd0d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
-  currentHealth: 5
+  maxHealth: 3
+  currentHealth: 3
 --- !u!114 &1384346536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2646,9 +2694,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movespeed: 3
   turnSpeed: 1
-  attackRange: 0
+  attackRange: 10
   aggroRange: 50
-  attackWindupTime: 0
+  forceIdle: 1
 --- !u!114 &1384346537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2738,7 +2786,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1384346533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63.929996, y: 19.62, z: 1.8711243}
+  m_LocalPosition: {x: 63.929996, y: 19.62, z: 0}
   m_LocalScale: {x: 1.7513, y: 1.7513, z: 1.7513}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2759,16 +2807,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cac7c784f23a8441848d3f60157a0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackWindupTime: 0
-  attackEndLagTime: 0
-  lockInAttackThreshold: 0
+  attackWindupTime: 1
+  attackEndLagTime: 1
+  lockInAttackThreshold: 0.5
   aggroRange: 30
-  lungeSpeed: 0
-  lungeDistance: 0
+  lungeSpeed: 20
+  lungeDistance: 10
   sphereCastRadius: 0
   sphereCastLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
+  bulletPrefab: {fileID: 2902453118678893369, guid: 793041aad96405941b48973f2ed20bb5, type: 3}
 --- !u!1 &1461255767
 GameObject:
   m_ObjectHideFlags: 0
@@ -3287,6 +3336,8 @@ GameObject:
   - component: {fileID: 1686805210}
   - component: {fileID: 1686805209}
   - component: {fileID: 1686805208}
+  - component: {fileID: 1686805218}
+  - component: {fileID: 1686805217}
   m_Layer: 8
   m_Name: Enemy (3)
   m_TagString: Untagged
@@ -3322,8 +3373,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daf99c3834a354bbd9a35609fd0d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 5
-  currentHealth: 5
+  maxHealth: 3
+  currentHealth: 3
 --- !u!114 &1686805210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3338,9 +3389,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movespeed: 3
   turnSpeed: 1
-  attackRange: 0
+  attackRange: 10
   aggroRange: 50
-  attackWindupTime: 0
+  forceIdle: 1
 --- !u!114 &1686805211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3430,7 +3481,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1686805207}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 60.1, y: 32.4, z: 1.8711243}
+  m_LocalPosition: {x: 60.1, y: 32.4, z: 0}
   m_LocalScale: {x: 1.7513, y: 1.7513, z: 1.7513}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3451,16 +3502,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cac7c784f23a8441848d3f60157a0a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackWindupTime: 0
-  attackEndLagTime: 0
-  lockInAttackThreshold: 0
+  attackWindupTime: 1
+  attackEndLagTime: 1
+  lockInAttackThreshold: 0.5
   aggroRange: 30
-  lungeSpeed: 0
-  lungeDistance: 0
+  lungeSpeed: 20
+  lungeDistance: 10
   sphereCastRadius: 0
   sphereCastLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
+  bulletPrefab: {fileID: 2902453118678893369, guid: 793041aad96405941b48973f2ed20bb5, type: 3}
+--- !u!114 &1686805217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686805207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cac7c784f23a8441848d3f60157a0a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackWindupTime: 1
+  attackEndLagTime: 1
+  lockInAttackThreshold: 0.5
+  aggroRange: 30
+  lungeSpeed: 20
+  lungeDistance: 10
+  sphereCastRadius: 0
+  sphereCastLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  bulletPrefab: {fileID: 0}
+--- !u!114 &1686805218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686805207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cac7c784f23a8441848d3f60157a0a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackWindupTime: 1
+  attackEndLagTime: 1
+  lockInAttackThreshold: 0.5
+  aggroRange: 30
+  lungeSpeed: 20
+  lungeDistance: 10
+  sphereCastRadius: 0
+  sphereCastLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  bulletPrefab: {fileID: 0}
 --- !u!1 &1763662758
 GameObject:
   m_ObjectHideFlags: 0
@@ -3902,6 +4000,12 @@ MonoBehaviour:
   cameraPosition: {x: 50.1, y: 13.7, z: -15.81}
   mainCam: {fileID: 963194227}
   camControl: {fileID: 963194229}
+  enemiesToEnable:
+  - {fileID: 2003078326}
+  - {fileID: 1145659159}
+  - {fileID: 1686805211}
+  - {fileID: 1384346537}
+  - {fileID: 1320707082}
 --- !u!65 &1974015952
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3913,8 +4017,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 28.134808, y: 41.3043, z: 10}
-  m_Center: {x: 0, y: 11.629093, z: 0}
+  m_Size: {x: 46.423912, y: 41.3043, z: 10}
+  m_Center: {x: 0.45697403, y: 11.629093, z: 0}
 --- !u!4 &1974015953
 Transform:
   m_ObjectHideFlags: 0
@@ -3997,10 +4101,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movespeed: 3
-  turnSpeed: 1
+  turnSpeed: 5
   attackRange: 10
   aggroRange: 50
-  attackWindupTime: 0
+  forceIdle: 1
 --- !u!114 &2003078326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4090,7 +4194,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2003078322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 26, z: 1.8711243}
+  m_LocalPosition: {x: 39.5, y: 26, z: 0}
   m_LocalScale: {x: 1.7513, y: 1.7513, z: 1.7513}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4121,6 +4225,7 @@ MonoBehaviour:
   sphereCastLayerMask:
     serializedVersion: 2
     m_Bits: 1
+  bulletPrefab: {fileID: 2902453118678893369, guid: 793041aad96405941b48973f2ed20bb5, type: 3}
 --- !u!1 &2129327736
 GameObject:
   m_ObjectHideFlags: 0
@@ -4179,7 +4284,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: You are working on fixed camera and enemy behaviour
+  m_text: Player health, win and lose conditions, boost zones
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -9,10 +9,9 @@ public class StandardEnemyMovementModule : EnemyModule
     [SerializeField] private float turnSpeed;
     [SerializeField] private float attackRange;
     [SerializeField] private float aggroRange;
-    [SerializeField] private float attackWindupTime;
+    [SerializeField] private bool forceIdle = true;
     private PlayerController player;
     private bool attackProcessHasStarted;
-    private float currentAttackWindup;
 
     private Vector3 launchDirection;
     private float launchSpeed;
@@ -34,6 +33,9 @@ public class StandardEnemyMovementModule : EnemyModule
 
     public override void FixedUpdateEnemyModule()
     {
+        if (forceIdle)
+            return;
+
         base.FixedUpdateEnemyModule();
 
         switch (enemyController.CurrentEnemyStatus)
@@ -69,6 +71,7 @@ public class StandardEnemyMovementModule : EnemyModule
                         //WindUpAttack();
                         break;
                     case EnemyType.turret:
+                        TurretMovement();
                         break;
                     default:
                         break;
@@ -82,16 +85,16 @@ public class StandardEnemyMovementModule : EnemyModule
 
     }
 
+    public void ForceIdleToggle(bool toggleState)
+    {
+        forceIdle = toggleState;
+    }
+
     //if homing, just move towards player at a flat speed.
     private void HomingMovement()
     {
 
-        Vector3 targetDirection = player.transform.position - transform.position;
-        Vector3 projectedTargetDirection = Vector3.ProjectOnPlane(targetDirection, Vector3.forward);
-
-        Quaternion targetRotation = Quaternion.LookRotation(projectedTargetDirection, Vector3.forward);
-
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed);
+        SlowRotateToPlayer();
 
 
 
@@ -99,6 +102,16 @@ public class StandardEnemyMovementModule : EnemyModule
 
         //Vector3 newVel = (player.transform.position - transform.position).normalized * movespeed;
         ApplyNewVelocityToRigidbody(transform.forward*movespeed);
+    }
+
+    public void SlowRotateToPlayer()
+    {
+        Vector3 targetDirection = player.transform.position - transform.position;
+        Vector3 projectedTargetDirection = Vector3.ProjectOnPlane(targetDirection, Vector3.forward);
+
+        Quaternion targetRotation = Quaternion.LookRotation(projectedTargetDirection, Vector3.forward);
+
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed);
     }
 
     //if spacing, move to a distance from the player. Once there, do your attack.
@@ -119,6 +132,7 @@ public class StandardEnemyMovementModule : EnemyModule
     private void TurretMovement()
     {
         //I wonder if this really needs to exist?
+        enemyController.StartAttackWindup();
     }
 
     public void ApplyNewVelocityToRigidbody(Vector3 newVelocity)

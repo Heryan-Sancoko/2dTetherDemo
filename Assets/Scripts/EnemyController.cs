@@ -95,9 +95,19 @@ public class EnemyController : EntityController
         attackModule.StartWindupAttack();
     }
 
+    public void SlowRotateToPlayer()
+    {
+        moveModule.SlowRotateToPlayer();
+    }
+
     public void ApplyVelocityToRigidbody(Vector3 velocity)
     {
         moveModule.ApplyNewVelocityToRigidbody(velocity);   
     }
 
+
+    public void ToggleForceEnemyIdle(bool toggleState)
+    {
+        moveModule.ForceIdleToggle(toggleState);
+    }
 }

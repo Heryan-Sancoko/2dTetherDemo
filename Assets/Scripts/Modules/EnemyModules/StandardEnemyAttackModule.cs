@@ -25,6 +25,11 @@ public class StandardEnemyAttackModule : EnemyModule
     [SerializeField] private float sphereCastRadius;
     [SerializeField] private LayerMask sphereCastLayerMask;
 
+    private BulletManager bulletManager;
+    [SerializeField] private BulletScript bulletPrefab;
+
+
+
 
 
     public override void AddController(EntityController newController)
@@ -36,7 +41,7 @@ public class StandardEnemyAttackModule : EnemyModule
     // Start is called before the first frame update
     void Start()
     {
-        
+        bulletManager = BulletManager.Instance;
     }
 
     public override void UpdateEnemyModule()
@@ -54,8 +59,61 @@ public class StandardEnemyAttackModule : EnemyModule
                     SpacingEnemyAttackProcedure();
                     break;
                 case EnemyType.turret:
+                    TurretEnemyAttackProcedure();
                     break;
             }
+        }
+    }
+
+    private void TurretEnemyAttackProcedure()
+    {
+        enemyController.SlowRotateToPlayer();
+
+        switch (enemyController.CurrentEnemyStatus)
+        {
+            case EnemyStatus.windingUpAttack:
+                // charge up next shot
+                currentAttackWindup -= Time.deltaTime;
+
+                if (currentAttackWindup <= 0)
+                {
+                    //on charge complete, shoot
+                    enemyController.SetCurrentEnemyStatus(EnemyStatus.attacking);
+                }
+
+                break;
+            case EnemyStatus.attacking:
+
+                var renewedBullet = bulletManager.bulletList.Find(x => x.bulletType == bulletPrefab.bulletType && !x.gameObject.activeSelf);
+
+                if (renewedBullet != null)
+                {
+                    renewedBullet.ConfigureBullet(transform.forward, transform.position, 0, false);
+                }
+                else
+                {
+                    renewedBullet = Instantiate(bulletPrefab, transform.position, transform.rotation, null);
+                    renewedBullet.ConfigureBullet(transform.forward, transform.position, 0, false);
+                }
+
+                currentAttackEndLagRemaining = attackEndLagTime;
+                enemyController.SetCurrentEnemyStatus(EnemyStatus.attackEndLag);
+
+                //instantiate bullet/bullet pattern
+                //potentially play shooting animation
+                //start end lag
+                break;
+            case EnemyStatus.attackEndLag:
+
+                currentAttackEndLagRemaining -= Time.deltaTime;
+                if (currentAttackEndLagRemaining <= 0)
+                {
+                    currentAttackWindup = attackWindupTime;
+                    enemyController.SetCurrentEnemyStatus(EnemyStatus.windingUpAttack);
+                }
+
+                //be idle and just look at player for this time
+                break;
         }
     }
 
@@ -73,7 +131,8 @@ public class StandardEnemyAttackModule : EnemyModule
                 if (currentAttackWindup > lockInAttackThreshold)
                 {
                     //follow player direction
-                    transform.LookAt(player.transform.position, Vector3.up);
+                    //transform.LookAt(player.transform.position, Vector3.up);
+                    enemyController.SlowRotateToPlayer();
                 }
                 else if (currentAttackWindup <= lockInAttackThreshold && currentAttackWindup > 0)
                 {

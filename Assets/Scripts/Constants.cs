@@ -26,6 +26,8 @@ public static class Constants
         public static int Weapon = 10;
         public static int Hazard = 11;
         public static int FixedCamera = 12;
+        public static int PlayerProjectile = 13;
+        public static int EnemyProjectile = 14;
     }
 
     public static class AnimationPrams
