@@ -28,6 +28,7 @@ public static class Constants
         public static int FixedCamera = 12;
         public static int PlayerProjectile = 13;
         public static int EnemyProjectile = 14;
+        public static int BoostZone = 15;
     }
 
     public static class AnimationPrams

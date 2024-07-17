@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MoveStatus { idle, jumping, floating, moving, tethering, dashing, attacking, airHop, passive, stunned };
+public enum MoveStatus { idle, jumping, floating, moving, tethering, dashing, attacking, airHop, passive, stunned, boosting };
 
 public class PlayerController : EntityController
 {
     [SerializeField] private List<PlayerModule> moduleList = new List<PlayerModule>();
     [SerializeField] private PlayerMovementModule playerMovementModule;
     [SerializeField] private DashModule playerDashModule;
+    [SerializeField] private TetherModule playerTetherModule;
     [SerializeField] private GroundedCheckModule groundedCheckModule;
     public GroundedCheckModule GroundedModule => groundedCheckModule;
     private Rigidbody rbody;
@@ -36,6 +37,9 @@ public class PlayerController : EntityController
                     break;
                 case GroundedCheckModule:
                     groundedCheckModule = module as GroundedCheckModule;
+                    break;
+                case TetherModule:
+                    playerTetherModule = module as TetherModule;
                     break;
             }
         }
@@ -93,6 +97,16 @@ public class PlayerController : EntityController
     public void BecomeIntangible()
     {
         playerDashModule.BecomeIntangible();
+    }
+
+    public void CancelTether()
+    {
+        playerTetherModule.CancelTether();
+    }
+
+    public void SetJumpAmount(int newJumpAmount)
+    {
+        playerMovementModule.SetJumpAmount(newJumpAmount);
     }
 
     public T GetModule<T>() where T : PlayerModule

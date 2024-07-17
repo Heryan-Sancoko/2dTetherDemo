@@ -35,6 +35,16 @@ public class DashModule : PlayerModule
             dashCooldownRemaining > 0)
             return;
 
+        switch (playerController.CurrentMoveStatus)
+        {
+            case MoveStatus.boosting:
+                playerController.ForceVelocityOverDuration(Vector3.zero, 0, false, MoveStatus.dashing);
+                break;
+            case MoveStatus.tethering:
+                playerController.CancelTether();
+                break;
+        }
+
         usedDashTime = 0;
         Vector2 dashVector = playerMovementModule.InputVector;
         playerMovementModule.JumpCancelled?.Invoke();

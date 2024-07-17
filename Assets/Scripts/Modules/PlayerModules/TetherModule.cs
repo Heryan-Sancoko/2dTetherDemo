@@ -126,9 +126,14 @@ public class TetherModule : PlayerModule
 
         if (Vector3.Distance(transform.position, tetherTowards) < 1)
         {
-            OnTetherCancelled(new InputAction.CallbackContext());
+            CancelTether();
             SpeedBoostAfterLandingTether(tetherTowards);
         }
+    }
+
+    public void CancelTether()
+    {
+        OnTetherCancelled(new InputAction.CallbackContext());
     }
 
     private void SpeedBoostAfterLandingTether(Vector3 tetherPoint)
@@ -311,7 +316,8 @@ public class TetherModule : PlayerModule
     {
         //Debug.LogError("TETHER UP");
         currentTetherState = TetherState.idle;
-        playerController.SetCurrentMoveStatus(MoveStatus.passive);
+        if (playerController.CurrentMoveStatus != MoveStatus.dashing)
+            playerController.SetCurrentMoveStatus(MoveStatus.passive);
         playerMovementModule.SetJumpAmount(1);
         inactiveNodes.AddRange(tetherNodes);
         tetherNodes.Clear();

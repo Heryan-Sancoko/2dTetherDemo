@@ -46,6 +46,7 @@ public class PlayerMovementModule : PlayerModule
     private const float minSlowFallValue = 0.7f;
 
 
+
     private void Start()
     {
         rbody = playerController.Rbody;
@@ -96,6 +97,12 @@ public class PlayerMovementModule : PlayerModule
             coyoteTimeUsed = availableCoyoteTime;
             usedJumpTime = 0;
             currentJumpSpeed = jumpSpeed;
+
+            if (playerController.CurrentMoveStatus == MoveStatus.boosting)
+            {
+                forcedMovementTimer = 0;
+            }
+
             playerController.SetCurrentMoveStatus(MoveStatus.jumping);
         }
     }
@@ -160,6 +167,20 @@ public class PlayerMovementModule : PlayerModule
                 {
                     ApplyNewVelocityToRigidbody(Vector3.zero);
                 }
+
+                //if (playerController.CurrentMoveStatus == MoveStatus.boosting)
+                //{
+                //    if (forcedMovementTimer<= 0 && inputVector.x != 0)
+                //    SelectBestMoveStatusFromContext();
+                //}
+            }
+        }
+        else
+        {
+            if (playerController.CurrentMoveStatus == MoveStatus.boosting)
+            {
+                if (inputVector.x != 0)
+                    SelectBestMoveStatusFromContext();
             }
         }
     }
@@ -168,8 +189,71 @@ public class PlayerMovementModule : PlayerModule
     {
         base.FixedUpdatePlayerModule();
 
-        if (playerController.CurrentMoveStatus == MoveStatus.tethering)
-            return;
+        switch (playerController.CurrentMoveStatus)
+        {
+            case MoveStatus.airHop:
+                //do JUMP things if in the air
+                //do MOVE things if on the ground
+                //nothing changes, but you are in the air accelerating upwards slightly?
+                //once AIRHOP is over, go back to MOVE or JUMP
+                break;
+            case MoveStatus.attacking:
+                //do JUMP things if in the air
+                //do MOVE things if on the ground
+                //nothing changes, but your status is now attacking?
+                //once ATTACKING is over, go back to MOVE or JUMP
+                break;
+            case MoveStatus.boosting:
+                //if we are told to jump, JUMP <===Put in update
+                //dash in the direction of the boost area
+                //check distance traveled
+                //count down boost timer
+                break;
+            case MoveStatus.dashing:
+                //dash in the preserved input direction
+                //become intangible
+                //do other dash things
+                //count down dash timer
+                break;
+            case MoveStatus.floating:
+                //does this need to be here?
+                break;
+            case MoveStatus.idle:
+                //MOVE if input and grounded <===Put in update
+                //jump if JUMPing or in the air <===Put in update
+                break;
+            case MoveStatus.jumping:
+                //if we are on the ground, MOVE <===Put in update
+                //if we input a dash, DASH <===Put in update
+                //handle aerial movement
+                break;
+            case MoveStatus.moving:
+                //if we are told to jump, JUMP <===Put in update
+                //if we input a dash, DASH <===Put in update
+                //handle grounded movements
+                break;
+            case MoveStatus.passive:
+                //why is this here again?
+                break;
+            case MoveStatus.stunned:
+                //block inputs
+                //play stun animation
+                //apply potential knockback
+                //countdown the stun timer
+                break;
+            case MoveStatus.tethering:
+                //refer to tether script
+                return;
+            default:
+                break;
+        }
+
+        StandartMovement();
+
+    }
+
+    private void StandartMovement()
+    {
 
         if (groundedCheckModule.IsGrounded)
         {
@@ -180,7 +264,13 @@ public class PlayerMovementModule : PlayerModule
             AerialMovement();
         }
 
+        if (playerController.CurrentMoveStatus != MoveStatus.boosting)
         ClampVelocity();
+    }
+
+    private void BoostMovement()
+    {
+        
     }
 
     private void GroundedMovement()
@@ -207,6 +297,13 @@ public class PlayerMovementModule : PlayerModule
 
     private void InputBasedAirMovement()
     {
+        if (playerController.CurrentMoveStatus == MoveStatus.boosting)
+        {
+            ApplyAirMovement();
+            return;
+        }
+
+
         switch (inputVector.y)
         {
             case >= minSlowFallValue:
@@ -294,13 +391,24 @@ public class PlayerMovementModule : PlayerModule
 
     private void ApplyAirMovement()
     {
-        Vector3 moveVector = new Vector3(inputVector.x * AdjustedMovespeed(), rbody.velocity.y, 0);
+        float AdjustedInputVectorX = inputVector.x;
+
+        if (playerController.CurrentMoveStatus == MoveStatus.boosting)
+        {
+            AdjustedInputVectorX = rbody.velocity.x;
+        }
+        else
+        {
+            AdjustedInputVectorX = inputVector.x * AdjustedMovespeed();
+        }
+
+        Vector3 moveVector = new Vector3(AdjustedInputVectorX, rbody.velocity.y, 0);
 
         //moveVector = ForceAirMovespeed(moveVector);
 
         ApplyNewVelocityToRigidbody(moveVector);
 
-        if (inputmanager.Jump.phase == InputActionPhase.Performed)
+        if (inputmanager.Jump.phase == InputActionPhase.Performed && playerController.CurrentMoveStatus != MoveStatus.boosting)
             SlowFall();
     }
 
@@ -371,7 +479,7 @@ public class PlayerMovementModule : PlayerModule
 
     private void OnJumpCancelled()
     {
-        if (!groundedCheckModule.IsGrounded)
+        if (!groundedCheckModule.IsGrounded && playerController.CurrentMoveStatus != MoveStatus.boosting)
             playerController.SetCurrentMoveStatus(MoveStatus.jumping);
 
         usedJumpTime = availableJumpTime;

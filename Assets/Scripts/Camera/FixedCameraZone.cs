@@ -10,14 +10,49 @@ public class FixedCameraZone : MonoBehaviour
     [SerializeField] CameraController camControl;
 
     [SerializeField] private List<EnemyController> enemiesToEnable = new List<EnemyController>();
+    [SerializeField] private List<GameObject> doorsToLockUponEntering = new List<GameObject>();
+    [SerializeField] private List<GameObject> doorsToOpenUponCompletion = new List<GameObject>();
 
     private bool enemiesSpawnedAlready = false;
+
+    private int killedEnemiesInArea = 0;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        foreach (EnemyController enemy in enemiesToEnable)
+        {
+            if (enemy.TryGetComponent(out EnemyHealthModule enemyHealth))
+            {
+                enemyHealth.KillEntity += OnEnemiesKilled;
+            }
+        }
+    }
+
+    private void OnEnemiesKilled()
+    {
+        killedEnemiesInArea++;
+        if (killedEnemiesInArea >= enemiesToEnable.Count)
+        {
+            OpenDoors();
+        }
+    }
+
+    private void OpenDoors()
+    {
+        foreach (GameObject door in doorsToOpenUponCompletion)
+        {
+            door.gameObject.SetActive(false);
+        }
+    }
+
+    private void CloseDoors()
+    {
+        foreach (GameObject door in doorsToLockUponEntering)
+        {
+            door.gameObject.SetActive(true);
+        }
     }
 
     // Update is called once per frame
@@ -49,6 +84,7 @@ public class FixedCameraZone : MonoBehaviour
                     enemy.gameObject.SetActive(true);
                     enemy.ToggleForceEnemyIdle(false);
                 }
+                CloseDoors();
                 enemiesSpawnedAlready = true;
             }
         }
