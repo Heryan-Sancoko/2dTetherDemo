@@ -248,11 +248,11 @@ public class PlayerMovementModule : PlayerModule
                 break;
         }
 
-        StandartMovement();
+        StandardMovement();
 
     }
 
-    private void StandartMovement()
+    private void StandardMovement()
     {
 
         if (groundedCheckModule.IsGrounded)
@@ -297,11 +297,11 @@ public class PlayerMovementModule : PlayerModule
 
     private void InputBasedAirMovement()
     {
-        if (playerController.CurrentMoveStatus == MoveStatus.boosting)
-        {
-            ApplyAirMovement();
-            return;
-        }
+        //if (playerController.CurrentMoveStatus == MoveStatus.boosting)
+        //{
+        //    ApplyAirMovement();
+        //    return;
+        //}
 
 
         switch (inputVector.y)
@@ -328,12 +328,19 @@ public class PlayerMovementModule : PlayerModule
     {
         if (InputVector.y < maxFastFallValue)
         {
-            if (playerController.CurrentMoveStatus == MoveStatus.jumping)
+            switch (playerController.CurrentMoveStatus)
             {
-                JumpCancelled?.Invoke();
+                case MoveStatus.jumping:
+                    JumpCancelled?.Invoke();
+                    break;
+                case MoveStatus.boosting:
+                    forcedMovementTimer = 0;
+                    SelectBestMoveStatusFromContext();
+                    break;
+                default:
+                    SelectBestMoveStatusFromContext();
+                    break;
             }
-            else
-                SelectBestMoveStatusFromContext();
 
             float fallspeed = FastFallSpeed;
             if (inputmanager.Jump.phase == InputActionPhase.Performed)

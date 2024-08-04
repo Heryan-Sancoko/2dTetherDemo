@@ -13,6 +13,7 @@ public class TetherModule : PlayerModule
     [SerializeField] private Transform swingAssistant;
     [SerializeField] private GameObject nodePrefab;
 
+    private Rigidbody rbody;
     private PlayerMovementModule playerMovementModule;
     private bool isUsingMouse = false;
     private InputManager inputManager;
@@ -32,6 +33,9 @@ public class TetherModule : PlayerModule
     [SerializeField] private LayerMask tetherMask;
     [SerializeField] private LineRenderer lineRenderer;
 
+    private Vector3 reboundDir;
+    private Vector3 collisionOrigin;
+
     public enum TetherState {idle, shooting, anchored, swinging}
     private TetherState currentTetherState;
     private float ClosestDistance;
@@ -44,6 +48,7 @@ public class TetherModule : PlayerModule
 
     private void Start()
     {
+        rbody = GetComponent<Rigidbody>();
         inputManager = InputManager.Instance;
         inputManager.Tether.performed += OnTether;
         inputManager.Tether.canceled += OnTetherCancelled;
@@ -104,6 +109,11 @@ public class TetherModule : PlayerModule
         //so for now, we'll just keep it simple
         if (Physics.SphereCast(transform.position, tetherAnchorRadius, tetherDirection, out RaycastHit hitinfo, tetherRange, tetherMask))
         {
+            if (hitinfo.collider.gameObject.layer == Constants.Layers.Untetherable)
+            {
+                Debug.LogError("Cannot tether");
+                return;
+            }
             tetherAnchor.position = hitinfo.point;
             tetherAnchor.SetParent(hitinfo.transform, true);
             tetherAnchor.localScale = new Vector3(1 / hitinfo.transform.localScale.x, 1 / hitinfo.transform.localScale.y, 1 / hitinfo.transform.localScale.z);
@@ -314,16 +324,57 @@ public class TetherModule : PlayerModule
 
     private void OnTetherCancelled(InputAction.CallbackContext callback)
     {
-        //Debug.LogError("TETHER UP");
         currentTetherState = TetherState.idle;
         if (playerController.CurrentMoveStatus != MoveStatus.dashing)
+        {
             playerController.SetCurrentMoveStatus(MoveStatus.passive);
+        }
         playerMovementModule.SetJumpAmount(1);
         inactiveNodes.AddRange(tetherNodes);
         tetherNodes.Clear();
-        
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (currentTetherState == TetherState.swinging)
+        {
+            if (Vector3.Dot(collision.contacts[0].normal, Vector3.up) >= 0.9f)
+            {
+                CancelTether();
+                if (playerMovementModule.InputVector.magnitude > 0.1f)
+                {
+                    Vector3 flatInput = playerMovementModule.InputVector;
+                    flatInput.y = 0;
+                    SpeedBoostAfterLandingTether(transform.position + flatInput);
+                }
+            }
+            else
+            {
+
+                collisionOrigin = transform.position;
+
+                if (Vector3.Distance(transform.position, GetCurrentTetherPoint()) < (ClosestDistance - 1))
+                {
+                }
+            }
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (currentTetherState == TetherState.swinging)
+        {
+            if (Vector3.Distance(collisionOrigin, transform.position) < 0.1f)
+            {
+                CancelTether();
+
+                reboundDir = (collision.contacts[0].normal + ((transform.position - swingAssistant.position)*10)) * swingSpeed;
+                playerController.ApplyNewVelocityToRigidbody(reboundDir);
+            }
+
+            collisionOrigin = transform.position;
+        }
+    }
 
 
 }

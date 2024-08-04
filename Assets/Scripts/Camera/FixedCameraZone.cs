@@ -15,8 +15,7 @@ public class FixedCameraZone : MonoBehaviour
 
     private bool enemiesSpawnedAlready = false;
 
-    private int killedEnemiesInArea = 0;
-
+    //private int enemiesKilled = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -32,11 +31,18 @@ public class FixedCameraZone : MonoBehaviour
 
     private void OnEnemiesKilled()
     {
-        killedEnemiesInArea++;
-        if (killedEnemiesInArea >= enemiesToEnable.Count)
+        //enemiesKilled++;
+        //
+        //if (enemiesKilled >= enemiesToEnable.Count)
+        //    OpenDoors();
+
+        foreach (EnemyController enemy in enemiesToEnable)
         {
-            OpenDoors();
+            if (enemy.gameObject.activeSelf && enemy.CurrentHealth>0)
+                return;
         }
+
+        OpenDoors();
     }
 
     private void OpenDoors()
